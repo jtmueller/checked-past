@@ -1,5 +1,3 @@
-/// <reference path="../../typings/tsd.d.ts" />
-
 import { createAction, Action } from 'redux-actions';
 
 import { Todo, IRecord } from '../models/todos';
@@ -17,7 +15,7 @@ const deleteTodo = createAction<Todo>(
 
 const editTodo = createAction<Todo>(
   types.EDIT_TODO,
-  (todo: IRecord<Todo>, newText: string) => todo.set('text', newText)
+  (todo: IRecord<Todo>, newText: string) => todo.set<Todo>('text', newText)
 );
 
 const completeTodo = createAction<Todo>(

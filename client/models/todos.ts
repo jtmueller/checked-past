@@ -1,5 +1,3 @@
-/// <reference path="../../typings/tsd.d.ts" />
-
 import * as Immutable from 'immutable';
 
 export interface Todo {
@@ -8,7 +6,7 @@ export interface Todo {
   completed: boolean;
 };
 
-export type IRecord<T> = Immutable.Record.IRecord<T>
+export type IRecord<T> = Immutable.Record.IRecord<T>;
 
 /// An immutable list of immutable Todo items.
 export type TodoList = Immutable.List<IRecord<Todo>>;

@@ -1,5 +1,3 @@
-/// <reference path="../../typings/tsd.d.ts" />
-
 import { handleActions, Action } from 'redux-actions';
 import * as Immutable from 'immutable';
 
@@ -36,7 +34,7 @@ export default handleActions<TodoList>({
   [EDIT_TODO]: (state: TodoList, action: Action): TodoList => {
     return state.map(todo =>
       todo.id === action.payload.id
-        ? todo.set('text', action.payload.text)
+        ? todo.set<Todo>('text', action.payload.text)
         : todo
     ).toList();
   },
@@ -44,14 +42,14 @@ export default handleActions<TodoList>({
   [COMPLETE_TODO]: (state: TodoList, action: Action): TodoList => {
     return state.map(todo =>
       todo.id === action.payload.id
-        ? todo.set('completed', !todo.completed)
+        ? todo.set<Todo>('completed', !todo.completed)
         : todo
     ).toList();
   },
   
   [COMPLETE_ALL]: (state: TodoList, action: Action): TodoList => {
     const areAllMarked = state.every(todo => todo.completed);
-    return state.map(todo => todo.set('completed', !areAllMarked)).toList();
+    return state.map(todo => todo.set<Todo>('completed', !areAllMarked)).toList();
   },
 
   [CLEAR_COMPLETED]: (state: TodoList, action: Action): TodoList => {
