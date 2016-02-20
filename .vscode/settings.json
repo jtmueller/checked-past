@@ -1,4 +1,6 @@
 {
+  "typescript.tsdk": "C:\\Users\\joelm\\AppData\\Roaming\\npm\\node_modules\\typescript\\lib",
+
   "files.exclude": {
     "build" : true,
     "dist": true,
