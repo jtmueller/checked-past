@@ -1,5 +1,6 @@
-import * as React from 'react';
+'use strict';
 
+import * as React from 'react';
 import TodoTextInput from './TodoTextInput';
 
 interface HeaderProps {

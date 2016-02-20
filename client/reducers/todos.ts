@@ -1,3 +1,5 @@
+'use strict';
+
 import * as _ from 'lodash';
 import { handleActions, Action } from 'redux-actions';
 

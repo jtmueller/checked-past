@@ -1,3 +1,5 @@
+'use strict';
+
 import { createAction, Action } from 'redux-actions';
 
 import { Todo } from '../models/todos';
