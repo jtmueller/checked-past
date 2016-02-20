@@ -1,16 +1,15 @@
 {
+  "version": "1.6.2",
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
     "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noEmitOnError": true,
-    "outDir": "dist",
-    "allowJs": true
+    "outDir": "dist"
   },
-   "files": [
-     "typings/browser.d.ts",
-     "client/main.tsx"
+  "exclude": [
+    "dist",
+    "node_modules"
   ]
 }

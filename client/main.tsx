@@ -1,5 +1,6 @@
+/// <reference path="../typings/tsd.d.ts" />
+
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
 import {
   Store,
@@ -22,7 +23,7 @@ const initialState = {
 
 const store: Store = createStore(rootReducer, initialState);
 
-ReactDOM.render(
+React.render(
   <Provider store={store}>
     <App />
   </Provider>,
