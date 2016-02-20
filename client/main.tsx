@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import {
   Store,
@@ -21,7 +22,7 @@ const initialState = {
 
 const store: Store = createStore(rootReducer, initialState);
 
-React.render(
+ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,

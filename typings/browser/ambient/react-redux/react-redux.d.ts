@@ -1,5 +1,5 @@
 // Compiled using typings@0.6.8
-// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/62eedc3121a5e28c50473d2e4a9cefbcb9c3957f/react-redux/react-redux.d.ts
+// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/a513c4df6eb8505da8eef432891c8b69b73535d9/react-redux/react-redux.d.ts
 // Type definitions for react-redux 2.1.2
 // Project: https://github.com/rackt/react-redux
 // Definitions by: Qubo <https://github.com/tkqubo>
