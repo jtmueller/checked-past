@@ -32,7 +32,7 @@ class MainSection extends React.Component<MainSectionProps, MainSectionState> {
   }
 
   handleClearCompleted() {
-    const atLeastOneCompleted = this.props.todos.some(todo => todo.completed);
+    const atLeastOneCompleted = _.some(this.props.todos, todo => todo.completed);
     if (atLeastOneCompleted) {
       this.props.actions.clearCompleted();
     }
@@ -79,21 +79,17 @@ class MainSection extends React.Component<MainSectionProps, MainSectionState> {
     const { todos, actions } = this.props;
     const { filter } = this.state;
 
-    const filteredTodos = todos.filter(TODO_FILTERS[filter]);
-    const completedCount = todos.reduce((count: number, todo): number =>
-      todo.completed ? count + 1 : count,
-      0
+    const filteredTodos = _.filter(todos, TODO_FILTERS[filter]);
+    const completedCount = _.reduce(todos, (count: number, todo): number =>
+      todo.completed ? count + 1 : count, 0
     );
 
     return (
       <section className="main">
         {this.renderToggleAll(completedCount)}
         <ul className="todo-list">
-          {filteredTodos.map(todo =>
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              { ...actions }/>
+          {_.map(filteredTodos, todo =>
+            <TodoItem key={todo.id} todo={todo} { ...actions }/>
           )}
         </ul>
         {this.renderFooter(completedCount)}
