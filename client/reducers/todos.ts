@@ -4,16 +4,12 @@ import { handleActions, Action } from 'redux-actions';
 import { Todo } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
 
-const initialState: ReadonlyArray<Todo> = [{
-  text: 'Use Redux with TypeScript',
-  completed: false,
-  id: 0
-} as Todo];
+const initialState: ReadonlyArray<Todo> = [] as Todo[];
 
 export default handleActions<ReadonlyArray<Todo>>({
   [ActionType.ADD_TODO]: (state: ReadonlyArray<Todo>, action: Action) : ReadonlyArray<Todo> => {
     let newRecord: Todo = {
-      id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
+      id: _.reduce(state, (maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
       completed: action.payload.completed,
       text: action.payload.text
     };
