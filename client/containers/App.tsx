@@ -1,5 +1,3 @@
-/// <reference path="../../typings/tsd.d.ts" />
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as React from 'react';

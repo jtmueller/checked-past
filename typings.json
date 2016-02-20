@@ -1,0 +1,14 @@
+{
+  "name": "todomvc-redux-react-ts",
+  "ambientDependencies": {
+    "classnames": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
+    "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
+    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
+    "react-redux": "github:DefinitelyTyped/DefinitelyTyped/react-redux/react-redux.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
+    "redux": "github:DefinitelyTyped/DefinitelyTyped/redux/redux.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
+    "redux-actions": "github:DefinitelyTyped/DefinitelyTyped/redux-actions/redux-actions.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+  },
+  "ambientDevDependencies": {
+    "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#d6dd320291705694ba8e1a79497a908e9f5e6617"
+  }
+}

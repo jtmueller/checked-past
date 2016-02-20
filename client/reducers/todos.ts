@@ -1,5 +1,3 @@
-/// <reference path="../../typings/tsd.d.ts" />
-
 import { handleActions, Action } from 'redux-actions';
 import * as Immutable from 'immutable';
 

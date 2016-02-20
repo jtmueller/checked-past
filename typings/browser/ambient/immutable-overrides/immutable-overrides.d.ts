@@ -1,5 +1,5 @@
-/// <reference path='../../node_modules/immutable/dist/immutable.d.ts'/>
-
+// Compiled using typings@0.6.8
+// Source: typings\immutable\immutable-overrides.d.ts
 declare module Immutable {
 	export module Record {
 		type IRecord<T> = T & TypedMap<T>;

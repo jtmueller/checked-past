@@ -1,3 +1,5 @@
+// Compiled using typings@0.6.8
+// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/62eedc3121a5e28c50473d2e4a9cefbcb9c3957f/redux/redux.d.ts
 // Type definitions for Redux v1.0.0
 // Project: https://github.com/rackt/redux
 // Definitions by: William Buchwalter <https://github.com/wbuchwalter/>, Vincent Prouillet <https://github.com/Keats/>

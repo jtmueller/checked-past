@@ -1,6 +1,3 @@
-/// <reference path="../../../typings/tsd.d.ts" />
-/// <reference path="../../../typings/test.d.ts" />
-
 import { expect } from 'chai';
 
 import * as TodoActions from '../todos';

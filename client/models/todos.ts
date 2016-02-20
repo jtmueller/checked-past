@@ -1,5 +1,3 @@
-/// <reference path="../../typings/tsd.d.ts" />
-
 import * as Immutable from 'immutable';
 
 export interface Todo {

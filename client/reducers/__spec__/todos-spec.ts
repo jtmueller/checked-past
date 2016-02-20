@@ -1,6 +1,3 @@
-/// <reference path="../../../typings/tsd.d.ts" />
-/// <reference path="../../../typings/test.d.ts" />
-
 import { expect } from 'chai';
 
 import { Todo, TodoList, IRecord, TodoRecord } from '../../models/todos';

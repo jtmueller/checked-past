@@ -1,5 +1,3 @@
-/// <reference path="../../typings/tsd.d.ts" />
-
 import { createAction, Action } from 'redux-actions';
 
 import { Todo, IRecord } from '../models/todos';
