@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Todo, TodoList } from '../models/todos';
+import { Todo } from '../models/todos';
 import TodoItem from './TodoItem';
 import Footer from './Footer';
 
@@ -17,7 +17,7 @@ const TODO_FILTERS = {
 };
 
 interface MainSectionProps {
-  todos: TodoList;
+  todos: ReadonlyArray<Todo>;
   actions: any;
 }
 
@@ -44,11 +44,11 @@ class MainSection extends React.Component<MainSectionProps, MainSectionState> {
 
   renderToggleAll(completedCount) {
     const { todos, actions } = this.props;
-    if (todos.size > 0) {
+    if (todos.length > 0) {
       return (
         <input className="toggle-all"
                type="checkbox"
-               checked={completedCount === todos.size}
+               checked={completedCount === todos.length}
                onChange={() => actions.completeAll()} />
       );
     }
@@ -57,9 +57,9 @@ class MainSection extends React.Component<MainSectionProps, MainSectionState> {
   renderFooter(completedCount: number) {
     const { todos } = this.props;
     const { filter } = this.state;
-    const activeCount = todos.size - completedCount;
+    const activeCount = todos.length - completedCount;
 
-    if (todos.size) {
+    if (todos.length) {
       return (
         <Footer completedCount={completedCount}
                 activeCount={activeCount}

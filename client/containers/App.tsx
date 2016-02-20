@@ -1,15 +1,14 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as React from 'react';
-import * as Immutable from 'immutable';
 
 import Header from '../components/Header';
 import MainSection from '../components/MainSection';
 import * as TodoActions from '../actions/todos';
-import { TodoList } from '../models/todos';
+import { Todo } from '../models/todos';
 
 interface AppProps {
-  todos?: TodoList;
+  todos?: ReadonlyArray<Todo>;
   dispatch?: Redux.Dispatch;
 }
 

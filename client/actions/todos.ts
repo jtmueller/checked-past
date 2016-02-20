@@ -1,6 +1,6 @@
 import { createAction, Action } from 'redux-actions';
 
-import { Todo, IRecord } from '../models/todos';
+import { Todo } from '../models/todos';
 import * as types from '../constants/ActionTypes';
 
 const addTodo = createAction<Todo>(
@@ -15,7 +15,7 @@ const deleteTodo = createAction<Todo>(
 
 const editTodo = createAction<Todo>(
   types.EDIT_TODO,
-  (todo: IRecord<Todo>, newText: string) => todo.set('text', newText)
+  (todo: Todo, newText: string) => ({ id: todo.id, completed: todo.completed, text: newText }) as Todo
 );
 
 const completeTodo = createAction<Todo>(

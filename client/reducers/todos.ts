@@ -1,7 +1,7 @@
+import * as _ from 'lodash';
 import { handleActions, Action } from 'redux-actions';
-import * as Immutable from 'immutable';
 
-import { Todo, TodoList, TodoRecord } from '../models/todos';
+import { Todo } from '../models/todos';
 import {
   ADD_TODO,
   DELETE_TODO,
@@ -11,48 +11,48 @@ import {
   CLEAR_COMPLETED
 } from '../constants/ActionTypes';
 
-const initialState = Immutable.List([new TodoRecord({
+const initialState: ReadonlyArray<Todo> = [{
   text: 'Use Redux with TypeScript',
   completed: false,
   id: 0
-})]);
+} as Todo];
 
-export default handleActions<TodoList>({
-  [ADD_TODO]: (state: TodoList, action: Action) : TodoList => {
-    var newRecord = new TodoRecord({
+export default handleActions<ReadonlyArray<Todo>>({
+  [ADD_TODO]: (state: ReadonlyArray<Todo>, action: Action) : ReadonlyArray<Todo> => {
+    let newRecord: Todo = {
       id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
       completed: action.payload.completed,
       text: action.payload.text
-    });
-    return state.unshift(newRecord);
+    };
+    return [newRecord, ...state];
   },
   
-  [DELETE_TODO]: (state: TodoList, action: Action): TodoList => {
-    return state.filter(todo => todo.id !== action.payload.id).toList();
+  [DELETE_TODO]: (state: ReadonlyArray<Todo>, action: Action): ReadonlyArray<Todo> => {
+    return _.filter(state, todo => todo.id !== action.payload.id);
   },
   
-  [EDIT_TODO]: (state: TodoList, action: Action): TodoList => {
-    return state.map(todo =>
+  [EDIT_TODO]: (state: ReadonlyArray<Todo>, action: Action): ReadonlyArray<Todo> => {
+    return _.map(state, todo =>
       todo.id === action.payload.id
-        ? todo.set('text', action.payload.text)
+        ? { id: todo.id, completed: todo.completed, text: action.payload.text }
         : todo
-    ).toList();
+    );
   },
   
-  [COMPLETE_TODO]: (state: TodoList, action: Action): TodoList => {
-    return state.map(todo =>
+  [COMPLETE_TODO]: (state: ReadonlyArray<Todo>, action: Action): ReadonlyArray<Todo> => {
+    return _.map(state, todo =>
       todo.id === action.payload.id
-        ? todo.set('completed', !todo.completed)
+        ? { id: todo.id, completed: !todo.completed, text: todo.text }
         : todo
-    ).toList();
+    );
   },
   
-  [COMPLETE_ALL]: (state: TodoList, action: Action): TodoList => {
-    const areAllMarked = state.every(todo => todo.completed);
-    return state.map(todo => todo.set('completed', !areAllMarked)).toList();
+  [COMPLETE_ALL]: (state: ReadonlyArray<Todo>, action: Action): ReadonlyArray<Todo> => {
+    const areAllMarked = _.every(state, todo => todo.completed);
+    return _.map(state, todo => ({ id: todo.id, completed: !areAllMarked, text: todo.text }) as Todo);
   },
 
-  [CLEAR_COMPLETED]: (state: TodoList, action: Action): TodoList => {
-    return state.filter(todo => todo.completed === false).toList();
+  [CLEAR_COMPLETED]: (state: ReadonlyArray<Todo>, action: Action): ReadonlyArray<Todo> => {
+    return _.filter(state, todo => todo.completed === false);
   }
 }, initialState);
