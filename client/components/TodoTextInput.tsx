@@ -4,15 +4,15 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 
 interface TodoTextInputProps {
-    onSave: Function;
-    text?: string;
-    placeholder?: string,
-    editing?: boolean;
-    newTodo?: boolean;
+    readonly onSave: Function;
+    readonly text?: string;
+    readonly placeholder?: string,
+    readonly editing?: boolean;
+    readonly newTodo?: boolean;
 }
 
 interface TodoTextInputState {
-    text: string;
+    readonly text: string;
 }
 
 class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputState> {
@@ -45,11 +45,10 @@ class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputSta
 
     render() {
         return (
-            <input className={
-                classNames({
+            <input className={classNames({
                     edit: this.props.editing,
                     'new-todo': this.props.newTodo
-                }) }
+                })}
                 type="text"
                 placeholder={this.props.placeholder}
                 autoFocus={true}

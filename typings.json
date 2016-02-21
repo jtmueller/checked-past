@@ -6,6 +6,7 @@
     "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "moment": "github:DefinitelyTyped/DefinitelyTyped/moment/moment-node.d.ts#b090bcf9ba9f756ec8ff53e7707269729172a325",
     "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#f407264835650f5f38d4bb2c515a79e7a835916b",
+    "react-bootstrap": "github:DefinitelyTyped/DefinitelyTyped/react-bootstrap/react-bootstrap.d.ts#5f3b413653e738d5d9bfd1575d075e5334b5e564",
     "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#ca5bfe76d2d9bf6852cbc712d9f3e0047c93486e",
     "react-redux": "github:DefinitelyTyped/DefinitelyTyped/react-redux/react-redux.d.ts#a513c4df6eb8505da8eef432891c8b69b73535d9",
     "redux": "github:DefinitelyTyped/DefinitelyTyped/redux/redux.d.ts#a820bbdead70913f0c750802b367ed54cb99b442",

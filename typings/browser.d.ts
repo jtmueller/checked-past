@@ -2,6 +2,7 @@
 /// <reference path="browser\ambient\lodash\lodash.d.ts" />
 /// <reference path="browser\ambient\mocha\mocha.d.ts" />
 /// <reference path="browser\ambient\moment\moment.d.ts" />
+/// <reference path="browser\ambient\react-bootstrap\react-bootstrap.d.ts" />
 /// <reference path="browser\ambient\react-dom\react-dom.d.ts" />
 /// <reference path="browser\ambient\react-redux\react-redux.d.ts" />
 /// <reference path="browser\ambient\react\react.d.ts" />

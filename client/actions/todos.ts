@@ -12,13 +12,13 @@ import { store } from '../main';
 setInterval(() => {
     store.dispatch({
         type: ActionType.REFRESH_TIMES,
-        payload: {}
+        payload: void 0
     })
 }, 60 * 1000);
 
-export const addTodo = createAction<Todo>(
+export const addTodo = createAction<string>(
     ActionType.ADD_TODO,
-    (text: string) => ({ completed: false, text, lastModified: moment.utc().toDate() })
+    (text: string) => text
 );
 
 export const deleteTodo = createAction<Todo>(
@@ -26,14 +26,14 @@ export const deleteTodo = createAction<Todo>(
     (todo: Todo) => todo
 );
 
-export const editTodo = createAction<Todo>(
+export const editTodo = createAction<{ todo: Todo, newText: string }>(
     ActionType.EDIT_TODO,
-    (todo: Todo, newText: string) => ({ id: todo.id, completed: todo.completed, text: newText, lastModified: moment.utc().toDate() })
+    (todo: Todo, newText: string) => ({ todo, newText })
 );
 
 export const completeTodo = createAction<Todo>(
     ActionType.TOGGLE_TODO,
-    (todo: Todo) => ({ id: todo.id, completed: !todo.completed, text: todo.text, lastModified: moment.utc().toDate() })
+    (todo: Todo) => todo
 )
 
 export const completeAll = createAction<void>(

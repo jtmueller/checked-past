@@ -8,15 +8,14 @@ import { Todo } from '../models/todos';
 import TodoTextInput from './TodoTextInput';
 
 interface TodoItemProps {
-    todo: Todo;
-    editTodo: Function;
-    deleteTodo: Function;
-    completeTodo: Function;
-    key?: any;
+    readonly todo: Todo;
+    readonly editTodo: Function;
+    readonly deleteTodo: Function;
+    readonly completeTodo: Function;
 }
 
 interface TodoItemState {
-    editing: boolean;
+    readonly editing: boolean;
 }
 
 class TodoItem extends React.Component<TodoItemProps, TodoItemState> {

@@ -6,7 +6,8 @@ import * as classNames from 'classnames';
 import {
     SHOW_ALL,
     SHOW_COMPLETED,
-    SHOW_ACTIVE
+    SHOW_ACTIVE,
+    TodoFilter
 } from '../constants/TodoFilters';
 
 const FILTER_TITLES = {
@@ -17,37 +18,39 @@ const FILTER_TITLES = {
 
 
 interface FooterProps {
-    completedCount: number;
-    activeCount: number;
-    filter: string;
-    onClearCompleted: Function;
-    onShow: Function;
+    readonly completedCount: number;
+    readonly activeCount: number;
+    readonly filter: string;
+    readonly onClearCompleted: Function;
+    readonly onShow: Function;
 }
 
+const TodoCount = ({ activeCount }: { activeCount: number }) => {
+    const itemWord = activeCount === 1 ? 'item' : 'items';
+
+    return (
+        <span className="todo-count">
+            <strong>{activeCount || 'No'}</strong> {itemWord} left
+        </span>
+    );  
+};
+
+interface FilterLinkArgs {
+    filter: string, isSelected: boolean, onShow: Function
+}
+
+const FilterLink = ({filter, isSelected, onShow}: FilterLinkArgs) => {
+    const title = FILTER_TITLES[filter];
+    return (
+        <a className={classNames({ selected: isSelected }) }
+            style={{ cursor: 'pointer' }}
+            onClick={() => onShow(filter) }>
+            {title}
+        </a>
+    );
+};
+
 class Footer extends React.Component<FooterProps, any> {
-    renderTodoCount() {
-        const { activeCount } = this.props;
-        const itemWord = activeCount === 1 ? 'item' : 'items';
-
-        return (
-            <span className="todo-count">
-                <strong>{activeCount || 'No'}</strong> {itemWord} left
-            </span>
-        );
-    }
-
-    renderFilterLink(filter) {
-        const title = FILTER_TITLES[filter];
-        const { filter: selectedFilter, onShow } = this.props;
-
-        return (
-            <a className={classNames({ selected: filter === selectedFilter }) }
-                style={{ cursor: 'pointer' }}
-                onClick={() => onShow(filter) }>
-                {title}
-            </a>
-        );
-    }
 
     renderClearButton() {
         const { completedCount, onClearCompleted } = this.props;
@@ -68,15 +71,16 @@ class Footer extends React.Component<FooterProps, any> {
     }
 
     render() {
+        const { activeCount, filter, onShow } = this.props;
         return (
             <footer className="footer">
-                { this.renderTodoCount() }
+                <TodoCount activeCount={activeCount} />
                 <ul className="filters">
-                    {[SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED].map(filter =>
-                        <li key={filter}>
-                            { this.renderFilterLink(filter) }
+                    {[SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED].map(cur =>
+                        <li key={cur}>
+                            <FilterLink filter={cur} isSelected={cur === filter} onShow={onShow} />
                         </li>
-                    ) }
+                    )}
                 </ul>
                 { this.renderClearButton() }
             </footer>

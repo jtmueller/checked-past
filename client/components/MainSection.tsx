@@ -18,12 +18,12 @@ const TODO_FILTERS = {
 };
 
 interface MainSectionProps {
-    todos: ReadonlyArray<Todo>;
-    actions: any;
+    readonly todos: ReadonlyArray<Todo>;
+    readonly actions: any;
 }
 
 interface MainSectionState {
-    filter: string;
+    readonly filter: string;
 }
 
 class MainSection extends React.Component<MainSectionProps, MainSectionState> {

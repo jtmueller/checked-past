@@ -3,33 +3,36 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as React from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import Header from '../components/Header';
 import MainSection from '../components/MainSection';
 import * as TodoActions from '../actions/todos';
-import { Todo } from '../models/todos';
+import { Todo, AppState } from '../models/todos';
 
 interface AppProps {
-    todos?: ReadonlyArray<Todo>;
+    state?: AppState;
     dispatch?: Redux.Dispatch;
 }
 
 class App extends React.Component<AppProps, any> {
     render() {
-        const { todos, dispatch } = this.props;
+        const { state, dispatch } = this.props;
         const actions = bindActionCreators(TodoActions, dispatch);
-
+        
         return (
-            <div className="todoapp">
+          <Grid>
+            <Row>
+              <Col md={8} mdOffset={2} xs={10} xsOffset={1}>
                 <Header addTodo={actions.addTodo} />
-                <MainSection
-                    todos={todos}
-                    actions={actions}/>
-            </div>
+                <MainSection todos={state.todos} actions={actions} />
+              </Col>
+            </Row>
+          </Grid>
         );
     }
 }
 
-const mapStateToProps = ({ todos: todos }) => ({ todos });
+const mapStateToProps = ({state: state}) => ({ state });
 
 export default connect(mapStateToProps)(App);

@@ -2,10 +2,10 @@
 
 import { combineReducers } from 'redux';
 
-import todos from './todos';
+import reducers from './todos';
 
 const rootReducer = combineReducers({
-    todos: todos
+    state: reducers
 });
 
 export { rootReducer };
