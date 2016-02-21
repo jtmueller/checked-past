@@ -1,7 +1,8 @@
 'use strict';
 
 export interface Todo {
-  readonly id?: number;
-  readonly text: string;
-  readonly completed: boolean;
+    readonly id?: number;
+    readonly text: string;
+    readonly completed: boolean;
+    readonly lastModified: Date;
 };

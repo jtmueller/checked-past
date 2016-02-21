@@ -10,28 +10,26 @@ import * as TodoActions from '../actions/todos';
 import { Todo } from '../models/todos';
 
 interface AppProps {
-  todos?: ReadonlyArray<Todo>;
-  dispatch?: Redux.Dispatch;
+    todos?: ReadonlyArray<Todo>;
+    dispatch?: Redux.Dispatch;
 }
 
 class App extends React.Component<AppProps, any> {
-  render() {
-    const { todos, dispatch } = this.props;
-    const actions = bindActionCreators(TodoActions, dispatch);
+    render() {
+        const { todos, dispatch } = this.props;
+        const actions = bindActionCreators(TodoActions, dispatch);
 
-    return (
-      <div className="todoapp">
-        <Header addTodo={actions.addTodo} />
-        <MainSection
-          todos={todos}
-          actions={actions}/>
-      </div>
-    );
-  }
+        return (
+            <div className="todoapp">
+                <Header addTodo={actions.addTodo} />
+                <MainSection
+                    todos={todos}
+                    actions={actions}/>
+            </div>
+        );
+    }
 }
 
-const mapStateToProps = state => ({
-  todos: state.todos
-});
+const mapStateToProps = ({ todos: todos }) => ({ todos });
 
 export default connect(mapStateToProps)(App);
