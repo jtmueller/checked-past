@@ -3,7 +3,7 @@
 import * as moment from 'moment';
 import { createAction, Action } from 'redux-actions';
 
-import { Todo } from '../models/todos';
+import { Todo, TabType } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
 
 import { store } from '../main';
@@ -44,4 +44,9 @@ export const completeAll = createAction<void>(
 export const clearCompleted = createAction<void>(
     ActionType.CLEAR_COMPLETED,
     () => { }
+);
+
+export const changeTab = createAction<TabType>(
+    ActionType.ChangeTab,
+    (tab: TabType) => tab
 );

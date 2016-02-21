@@ -95,5 +95,10 @@ export default handleActions<AppState>({
         // a different state instance or redux decides that nothing changed and does not re-render
         const { monthlyTasks, weeklyTasks, todos, shopping, activeTab } = state;
         return { monthlyTasks, weeklyTasks, todos, shopping, activeTab };
+    },
+    
+    [ActionType.ChangeTab]: (state: AppState, action: Action<TabType>): AppState => {
+        const { monthlyTasks, weeklyTasks, todos, shopping } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab: action.payload };
     }
 }, initialState);

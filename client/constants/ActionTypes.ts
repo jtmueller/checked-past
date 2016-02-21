@@ -7,3 +7,4 @@ export const TOGGLE_TODO = 'TOGGLE_TODO';
 export const TOGGLE_ALL = 'TOGGLE_ALL';
 export const CLEAR_COMPLETED = 'CLEAR_COMPLETED';
 export const REFRESH_TIMES = 'REFRESH_TIMES';
+export const ChangeTab = 'CHANGE_TAB';

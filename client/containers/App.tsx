@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import Header from '../components/Header';
+import TodoTabs from '../components/TodoTabs';
 import MainSection from '../components/MainSection';
 import * as TodoActions from '../actions/todos';
 import { Todo, AppState } from '../models/todos';
@@ -24,8 +24,7 @@ class App extends React.Component<AppProps, any> {
           <Grid>
             <Row>
               <Col md={8} mdOffset={2} xs={10} xsOffset={1}>
-                <Header addTodo={actions.addTodo} />
-                <MainSection todos={state.todos} actions={actions} />
+                <TodoTabs state={state} actions={actions} />
               </Col>
             </Row>
           </Grid>
