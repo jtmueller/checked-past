@@ -4,6 +4,10 @@
     border-bottom: none;
 }
 
+.todoAppTabs, .todoAppTabs .panel-body, .todoAppTabs .panel-footer {
+    background-color: transparent;
+}
+
 .lastModified {
     float: right;
     position: relative;
@@ -16,13 +20,17 @@
     font-family: "Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-.tab-head {
+.header h2 {
     position: absolute;
-    top: 32px;
+    bottom: 65px;
     right: 16px;
-    opacity: 0.25;
+    color: #dddddd;
     font-size: 65px;
-    z-index: 0;
+    z-index: -1;
+}
+
+.header input, .header button {
+    background-color:rgba(255, 255, 255, 0.5);
 }
 
 .clear-button {

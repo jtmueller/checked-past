@@ -1,7 +1,7 @@
 'use strict';
 
 import * as React from 'react';
-import * as classNames from 'classnames';
+import { Button, Glyphicon, Input } from 'react-bootstrap';
 
 interface TodoTextInputProps {
     readonly onSave: Function;
@@ -23,9 +23,9 @@ class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputSta
         };
     }
 
-    handleSubmit(e) {
+    private handleKey(e) {
         const text = e.target.value.trim();
-        if (e.which === 13) {
+        if (e.which === 13) { // enter
             this.props.onSave(text);
             if (this.props.newTodo) {
                 this.setState({ text: '' });
@@ -33,29 +33,25 @@ class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputSta
         }
     }
 
-    handleChange(e) {
+    private handleChange(e) {
         this.setState({ text: e.target.value });
     }
-
-    handleBlur(e) {
-        if (!this.props.newTodo) {
-            this.props.onSave(e.target.value);
-        }
+    
+    private handleClick() {
+        this.props.onSave(this.state.text);
+        this.setState({ text: '' });
     }
 
     render() {
+        let saveBtn = <Button onClick={this.handleClick.bind(this)}><Glyphicon glyph="chevron-right"/></Button>;
         return (
-            <input className={classNames({
-                    edit: this.props.editing,
-                    'new-todo': this.props.newTodo
-                })}
+            <Input
                 type="text"
                 placeholder={this.props.placeholder}
-                autoFocus={true}
                 value={this.state.text}
-                onBlur={this.handleBlur.bind(this) }
-                onChange={this.handleChange.bind(this) }
-                onKeyDown={this.handleSubmit.bind(this) } />
+                onChange={this.handleChange.bind(this)}
+                onKeyDown={this.handleKey.bind(this)}
+                buttonAfter={saveBtn} />
         );
     }
 }

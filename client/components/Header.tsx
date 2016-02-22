@@ -24,7 +24,7 @@ class Header extends React.Component<HeaderProps, any> {
         let title = TabType[this.props.tab].toLowerCase();
         return (
             <header className="header">
-                <h2 className="tab-head">{title}</h2>
+                <h2>{title}</h2>
                 <TodoTextInput
                     newTodo
                     onSave={this.handleSave.bind(this) }
