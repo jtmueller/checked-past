@@ -58,11 +58,15 @@ function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
 
 export default handleActions<AppState>({
     [ActionType.AddTodo]: (state: AppState, action: Action<string>): AppState => {
+        const todoText = action.payload;
+        if (!todoText) {
+            return state;
+        }
         const curValues = getTabProp(state);
         const newEntry: Todo = {
             id: _.reduce(curValues, (maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
             completed: false,
-            text: action.payload,
+            text: todoText,
             lastModified: moment.utc().toDate()
         };
         const values = [newEntry, ...curValues];
@@ -76,6 +80,9 @@ export default handleActions<AppState>({
     },
 
     [ActionType.EditTodo]: (state: AppState, {payload: {todo, newText}}: Action<{ todo: Todo, newText: string }>): AppState => {
+        if (!newText || todo.text === newText) {
+            return state;
+        }
         const { id, completed } = todo;
         const curValues = getTabProp(state);
         const values = _.map(curValues, cur => cur.id !== id ? cur :

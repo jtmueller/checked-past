@@ -19,7 +19,7 @@ setInterval(() => {
 
 export const addTodo = createAction<string>(
     ActionType.AddTodo,
-    (text: string) => text
+    (text: string) => text.trim()
 );
 
 export const deleteTodo = createAction<Todo>(
@@ -29,7 +29,7 @@ export const deleteTodo = createAction<Todo>(
 
 export const editTodo = createAction<{ todo: Todo, newText: string }>(
     ActionType.EditTodo,
-    (todo: Todo, newText: string) => ({ todo, newText })
+    (todo: Todo, newText: string) => ({ todo, newText: newText.trim() })
 );
 
 export const completeTodo = createAction<Todo>(
