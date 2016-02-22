@@ -5,44 +5,45 @@ import { createAction, Action } from 'redux-actions';
 
 import { Todo, TabType } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
+import { FilterType } from '../constants/TodoFilters';
 
 import { store } from '../main';
 
 // redraw the list every minute so that the timestamps update
 setInterval(() => {
     store.dispatch({
-        type: ActionType.REFRESH_TIMES,
+        type: ActionType.RefreshTimes,
         payload: void 0
     })
 }, 60 * 1000);
 
 export const addTodo = createAction<string>(
-    ActionType.ADD_TODO,
+    ActionType.AddTodo,
     (text: string) => text
 );
 
 export const deleteTodo = createAction<Todo>(
-    ActionType.DELETE_TODO,
+    ActionType.DeleteTodo,
     (todo: Todo) => todo
 );
 
 export const editTodo = createAction<{ todo: Todo, newText: string }>(
-    ActionType.EDIT_TODO,
+    ActionType.EditTodo,
     (todo: Todo, newText: string) => ({ todo, newText })
 );
 
 export const completeTodo = createAction<Todo>(
-    ActionType.TOGGLE_TODO,
+    ActionType.ToggleTodo,
     (todo: Todo) => todo
 )
 
-export const completeAll = createAction<void>(
-    ActionType.TOGGLE_ALL,
+export const toggleAll = createAction<void>(
+    ActionType.ToggleAll,
     () => { }
 )
 
 export const clearCompleted = createAction<void>(
-    ActionType.CLEAR_COMPLETED,
+    ActionType.ClearCompleted,
     () => { }
 );
 
@@ -50,3 +51,8 @@ export const changeTab = createAction<TabType>(
     ActionType.ChangeTab,
     (tab: TabType) => tab
 );
+
+export const setFilter = createAction<FilterType>(
+    ActionType.SetFilter,
+    (filter: FilterType) => filter
+)

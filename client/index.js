@@ -1,2 +1,2 @@
-//import 'todomvc-app-css/index.css';
+import './css/app.css';
 import './main';

@@ -6,6 +6,7 @@ import { handleActions } from 'redux-actions';
 
 import { Todo, AppState, TabType } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
+import { ShowAll, ShowCompleted, FilterType } from '../constants/TodoFilters';
 
 interface Action<T> {
     type: string;
@@ -19,10 +20,9 @@ const initialState: AppState = {
     weeklyTasks: [] as Todo[],
     todos: [] as Todo[],
     shopping: [] as Todo[],
-    activeTab: TabType.Todos
+    activeTab: TabType.Weekly,
+    filter: 'show_all'
 };
-
-const stateProps = _('monthlyTasks,weeklyTasks,todos,shopping,activeTab'.split(','));
 
 function getTabProp(state:AppState) {
     switch (state.activeTab) {
@@ -31,12 +31,12 @@ function getTabProp(state:AppState) {
         case TabType.Todos: return state.todos;
         case TabType.Shopping: return state.shopping;
         default:
-            throw new Error(`Unknown tab type: '${state.activeTab}'.`);
+            throw new Error(`Unknown tab type: '${state.activeTab}' (${TabType[state.activeTab]}).`);
     }
 }
 
 function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
-    let { monthlyTasks, weeklyTasks, todos, shopping, activeTab } = state;
+    let { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = state;
     switch (state.activeTab) {
         case TabType.Monthly:
             monthlyTasks = values;
@@ -51,40 +51,40 @@ function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
             shopping = values;
             break;
         default:
-            throw new Error(`Unknown tab type: '${state.activeTab}'.`);
+            throw new Error(`Unknown tab type: '${state.activeTab}' (${TabType[state.activeTab]}).`);
     }
-    return { monthlyTasks, weeklyTasks, todos, shopping, activeTab };
+    return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter };
 }
 
 export default handleActions<AppState>({
-    [ActionType.ADD_TODO]: (state: AppState, action: Action<string>): AppState => {
+    [ActionType.AddTodo]: (state: AppState, action: Action<string>): AppState => {
+        const curValues = getTabProp(state);
         const newEntry: Todo = {
-            id: _.reduce(state.todos, (maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
+            id: _.reduce(curValues, (maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
             completed: false,
             text: action.payload,
             lastModified: moment.utc().toDate()
         };
-        const curValues = getTabProp(state);
         const values = [newEntry, ...curValues];
         return updateTabProp(state, values);
     },
 
-    [ActionType.DELETE_TODO]: (state: AppState, action: Action<Todo>): AppState => {
+    [ActionType.DeleteTodo]: (state: AppState, action: Action<Todo>): AppState => {
         const curValues = getTabProp(state);
         const values = _.filter(curValues, todo => todo.id !== action.payload.id);
         return updateTabProp(state, values);
     },
 
-    [ActionType.EDIT_TODO]: (state: AppState, {payload: {todo, newText}}: Action<{ todo: Todo, newText: string }>): AppState => {
+    [ActionType.EditTodo]: (state: AppState, {payload: {todo, newText}}: Action<{ todo: Todo, newText: string }>): AppState => {
         const { id, completed } = todo;
         const curValues = getTabProp(state);
-        const values = _.map(state.todos, cur => cur.id !== id ? cur :
+        const values = _.map(curValues, cur => cur.id !== id ? cur :
             { id, completed, text: newText, lastModified: moment.utc().toDate() }
         );
         return updateTabProp(state, values);
     },
 
-    [ActionType.TOGGLE_TODO]: (state: AppState, {payload: todo}: Action<Todo>): AppState => {
+    [ActionType.ToggleTodo]: (state: AppState, {payload: todo}: Action<Todo>): AppState => {
         const { id, text, completed } = todo;
         const curValues = getTabProp(state);
         const values = _.map(curValues, cur => cur.id !== id ? cur :
@@ -93,7 +93,7 @@ export default handleActions<AppState>({
         return updateTabProp(state, values);
     },
 
-    [ActionType.TOGGLE_ALL]: (state: AppState, action: Action<void>): AppState => {
+    [ActionType.ToggleAll]: (state: AppState, action: Action<void>): AppState => {
         const { monthlyTasks, weeklyTasks, shopping, activeTab } = state;
         const areAllMarked = _.every(state.todos, todo => todo.completed);
         const curValues = getTabProp(state);
@@ -103,21 +103,30 @@ export default handleActions<AppState>({
         return updateTabProp(state, values);
     },
 
-    [ActionType.CLEAR_COMPLETED]: (state: AppState, action: Action<void>): AppState => {
+    [ActionType.ClearCompleted]: (state: AppState, action: Action<void>): AppState => {
         const curValues = getTabProp(state);
         const values = _.filter(curValues, todo => todo.completed === false);
-        return updateTabProp(state, values);
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = updateTabProp(state, values);
+        return { 
+            filter: filter === ShowCompleted ? ShowAll : filter,
+            monthlyTasks, weeklyTasks, todos, shopping, activeTab 
+        };
     },
     
-    [ActionType.REFRESH_TIMES]: (state: AppState, action: Action<void>): AppState => {
+    [ActionType.RefreshTimes]: (state: AppState, action: Action<void>): AppState => {
         // this is just to get the UI to redraw the timestamps, so no changes, but we have to return
         // a different state instance or redux decides that nothing changed and does not re-render
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab };
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter };
     },
     
     [ActionType.ChangeTab]: (state: AppState, action: Action<TabType>): AppState => {
-        const { monthlyTasks, weeklyTasks, todos, shopping } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab: action.payload };
+        const { monthlyTasks, weeklyTasks, todos, shopping, filter } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab: action.payload, filter };
+    },
+    
+    [ActionType.SetFilter]: (state: AppState, action: Action<FilterType>): AppState => {
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter: action.payload };
     }
 }, initialState);

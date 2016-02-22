@@ -63,7 +63,7 @@ class TodoItem extends React.Component<TodoItemProps, TodoItemState> {
                         onChange={ () => completeTodo(todo) } />
                     <label onDoubleClick={ this.handleDoubleClick.bind(this) }>
                         {todo.text}
-                        <span style={{ float: 'right', position: 'relative', top: 25, fontSize: 'xx-small', color: 'silver' }}>{lastModified}</span>
+                        <span className="lastModified">{lastModified}</span>
                     </label>
                     <button className="destroy"
                         onClick={ () => deleteTodo(todo) } />

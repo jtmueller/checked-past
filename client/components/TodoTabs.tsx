@@ -1,15 +1,18 @@
 'use strict';
 import * as React from 'react';
-import { Nav, NavItem } from 'react-bootstrap';
+import { Nav, NavItem, Badge, Panel } from 'react-bootstrap';
 
-import { AppState, TabType } from '../models/todos';
+import { AppState, TabType, Todo } from '../models/todos';
 import MainSection from './MainSection';
 import Header from './Header';
+import Footer from './Footer';
 
 interface TodoTabProps {
     readonly state: AppState;
     readonly actions: any;
 }
+
+const UndoneBadge = ({count}: {count:number}) => count > 0 ? <Badge>{count}</Badge> : <span/>;
 
 class TodoTabs extends React.Component<TodoTabProps, void> {  
     private getSelectedTodos() {
@@ -33,20 +36,45 @@ class TodoTabs extends React.Component<TodoTabProps, void> {
         changeTab(selectedKey);
     }
     
+    private countUndone(tasks: ReadonlyArray<Todo>) {
+        return _.reduce(tasks, (acc, t) => acc + (t.completed ? 0 : 1), 0);
+    }
+    
+    private renderFooter(todos: ReadonlyArray<Todo>) {
+        if (todos.length) {
+            const { state: {filter}, actions: {clearCompleted, setFilter} } = this.props;
+            return (
+                <Footer {...{ todos, filter, clearCompleted, setFilter}} />
+            );
+        }
+    }
+    
+    private renderTabs(state:AppState) {
+        let monthlyCount = this.countUndone(state.monthlyTasks);
+        let weeklyCount = this.countUndone(state.weeklyTasks);
+        let todoCount = this.countUndone(state.todos);
+        let shoppingCount = this.countUndone(state.shopping);
+        return (
+            <Nav bsStyle="tabs" activeKey={state.activeTab} onSelect={this.handleSelect}>
+                <NavItem key={0} eventKey={TabType.Weekly}>Weekly <UndoneBadge count={weeklyCount} /></NavItem>
+                <NavItem key={1} eventKey={TabType.Monthly}>Monthly <UndoneBadge count={monthlyCount} /></NavItem>
+                <NavItem key={2} eventKey={TabType.Todos}>Todos <UndoneBadge count={todoCount} /></NavItem>
+                <NavItem key={3} eventKey={TabType.Shopping}>Shopping <UndoneBadge count={shoppingCount} /></NavItem>
+            </Nav>
+        ); 
+    }
+    
     render () {
         const todos = this.getSelectedTodos();
-        const { actions, state: { activeTab }} = this.props;
+        const { actions, state } = this.props;
+
         return (
-            <div>
-            <Nav bsStyle="tabs" activeKey={activeTab} onSelect={this.handleSelect}>
-                <NavItem eventKey={TabType.Monthly}>Monthly</NavItem>
-                <NavItem eventKey={TabType.Weekly}>Weekly</NavItem>
-                <NavItem eventKey={TabType.Todos}>Todos</NavItem>
-                <NavItem eventKey={TabType.Shopping}>Shopping</NavItem>
-            </Nav>
-            <Header addTodo={actions.addTodo} />
-            <MainSection todos={todos} actions={actions} />
-            </div>
+            <Panel className="todoAppTabs"
+                header={this.renderTabs(state)}
+                footer={this.renderFooter(todos)}>
+                <Header addTodo={actions.addTodo} tab={state.activeTab} />
+                <MainSection todos={todos} actions={actions} filter={state.filter} />
+            </Panel>
         );
     }
 }

@@ -2,9 +2,11 @@
 
 import * as React from 'react';
 import TodoTextInput from './TodoTextInput';
+import { TabType } from '../models/todos';
 
 interface HeaderProps {
     addTodo: Function;
+    tab: TabType;
 };
 
 class Header extends React.Component<HeaderProps, any> {
@@ -15,13 +17,14 @@ class Header extends React.Component<HeaderProps, any> {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return false;
+        return this.props.tab !== nextProps.tab;
     }
 
     render() {
+        let title = TabType[this.props.tab].toLowerCase();
         return (
             <header className="header">
-                <h1>todos</h1>
+                <h2 className="tab-head">{title}</h2>
                 <TodoTextInput
                     newTodo
                     onSave={this.handleSave.bind(this) }

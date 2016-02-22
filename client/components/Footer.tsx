@@ -2,87 +2,67 @@
 
 import * as React from 'react';
 import * as classNames from 'classnames';
+import { Nav, NavItem, Button } from 'react-bootstrap';
 
-import {
-    SHOW_ALL,
-    SHOW_COMPLETED,
-    SHOW_ACTIVE,
-    TodoFilter
-} from '../constants/TodoFilters';
+import { Todo } from '../models/todos';
+import { ShowAll, ShowCompleted, ShowActive, FilterType } from '../constants/TodoFilters';
 
-const FILTER_TITLES = {
-    [SHOW_ALL]: 'All',
-    [SHOW_ACTIVE]: 'Active',
-    [SHOW_COMPLETED]: 'Completed'
+const FilterTitles = {
+    [ShowAll]: 'All',
+    [ShowCompleted]: 'Completed',
+    [ShowActive]: 'Active'
 };
-
 
 interface FooterProps {
-    readonly completedCount: number;
-    readonly activeCount: number;
-    readonly filter: string;
-    readonly onClearCompleted: Function;
-    readonly onShow: Function;
+    readonly todos: ReadonlyArray<Todo>;
+    readonly filter: FilterType;
+    readonly clearCompleted: Function;
+    readonly setFilter: Function;
 }
 
-const TodoCount = ({ activeCount }: { activeCount: number }) => {
-    const itemWord = activeCount === 1 ? 'item' : 'items';
+class Footer extends React.Component<FooterProps, void> {
 
-    return (
-        <span className="todo-count">
-            <strong>{activeCount || 'No'}</strong> {itemWord} left
-        </span>
-    );  
-};
-
-interface FilterLinkArgs {
-    filter: string, isSelected: boolean, onShow: Function
-}
-
-const FilterLink = ({filter, isSelected, onShow}: FilterLinkArgs) => {
-    const title = FILTER_TITLES[filter];
-    return (
-        <a className={classNames({ selected: isSelected }) }
-            style={{ cursor: 'pointer' }}
-            onClick={() => onShow(filter) }>
-            {title}
-        </a>
-    );
-};
-
-class Footer extends React.Component<FooterProps, any> {
-
-    renderClearButton() {
-        const { completedCount, onClearCompleted } = this.props;
+    private renderClearButton(completedCount: number) {
         if (completedCount > 0) {
             return (
-                <button className="clear-completed"
-                    onClick={() => onClearCompleted() }>
+                <Button className="pull-right clear-button"
+                    onClick={this.handleClearCompleted}>
                     Clear completed
-                </button>
+                </Button>
             );
         }
     }
+    
+    private handleClearCompleted = () => {
+        const atLeastOneCompleted = _.some(this.props.todos, todo => todo.completed);
+        if (atLeastOneCompleted) {
+            this.props.clearCompleted();
+        }
+    }
+    
+    private handleSelect = (selectedKey) => {
+        this.props.setFilter(selectedKey);
+    }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.activeCount !== nextProps.activeCount
-            || this.props.completedCount !== nextProps.completedCount
-            || this.props.filter !== nextProps.filter;
+        return this.props.filter !== nextProps.filter
+            || this.props.todos !== nextProps.todos;
     }
 
     render() {
-        const { activeCount, filter, onShow } = this.props;
+        const { todos, filter } = this.props;
+        const completedCount = _.reduce(todos, (count: number, todo:Todo) => 
+            count + (todo.completed ? 1 : 0), 0);
+        const activeCount = todos.length - completedCount;
+        
         return (
-            <footer className="footer">
-                <TodoCount activeCount={activeCount} />
-                <ul className="filters">
-                    {[SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED].map(cur =>
-                        <li key={cur}>
-                            <FilterLink filter={cur} isSelected={cur === filter} onShow={onShow} />
-                        </li>
+            <footer className="clearfix">
+                { this.renderClearButton(completedCount) }
+                <Nav bsStyle="pills" activeKey={filter} onSelect={this.handleSelect}>
+                    {[ShowAll, ShowActive, ShowCompleted].map(cur =>
+                        <NavItem key={cur} eventKey={cur}>{FilterTitles[cur]}</NavItem>
                     )}
-                </ul>
-                { this.renderClearButton() }
+                </Nav>
             </footer>
         );
     }

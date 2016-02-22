@@ -1,4 +1,5 @@
 'use strict';
+import { FilterType } from '../constants/TodoFilters';
 
 export interface Todo {
     readonly id?: number;
@@ -25,4 +26,5 @@ export interface AppState {
     readonly todos: ReadonlyArray<Todo>;
     readonly shopping: ReadonlyArray<Todo>;
     readonly activeTab: TabType;
+    readonly filter: FilterType;
 }

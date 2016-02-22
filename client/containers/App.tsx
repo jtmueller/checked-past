@@ -21,13 +21,15 @@ class App extends React.Component<AppProps, any> {
         const actions = bindActionCreators(TodoActions, dispatch);
         
         return (
+          <div style={{ marginTop: 15 }}>
           <Grid>
             <Row>
-              <Col md={8} mdOffset={2} xs={10} xsOffset={1}>
+              <Col md={8} mdOffset={2} xs={12}>
                 <TodoTabs state={state} actions={actions} />
               </Col>
             </Row>
           </Grid>
+          </div>
         );
     }
 }
