@@ -21,7 +21,6 @@ class App extends React.Component<AppProps, any> {
         const actions = bindActionCreators(TodoActions, dispatch);
         
         return (
-          <div style={{ marginTop: 15 }}>
           <Grid>
             <Row>
               <Col md={8} mdOffset={2} xs={12}>
@@ -29,7 +28,6 @@ class App extends React.Component<AppProps, any> {
               </Col>
             </Row>
           </Grid>
-          </div>
         );
     }
 }

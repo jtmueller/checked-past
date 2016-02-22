@@ -1,3 +1,6 @@
+body {
+    padding-top: 15px;
+}
 
 .todo-list .panel-heading {
     padding: 10px 0 0 0; 
