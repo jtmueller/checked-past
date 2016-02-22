@@ -37,6 +37,12 @@
     margin-left: 10px;
 }
 
+.tab-content .panel {
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
 .todo-list li .toggle {
 	text-align: center;
 	width: 40px;
