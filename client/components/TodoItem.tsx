@@ -1,6 +1,7 @@
 'use strict';
 
 import * as React from 'react';
+import { Glyphicon } from 'react-bootstrap';
 import * as classNames from 'classnames';
 import * as moment from 'moment';
 
@@ -66,18 +67,20 @@ class TodoItem extends React.Component<TodoItemProps, TodoItemState> {
                         <span className="lastModified">{lastModified}</span>
                     </label>
                     <button className="destroy"
-                        onClick={ () => deleteTodo(todo) } />
+                        onClick={ () => deleteTodo(todo) }>
+                        <Glyphicon glyph="remove-sign" />
+                    </button>
                 </div>
             );
         }
 
         return (
-            <li className={
+            <div className={
                 classNames({
                     completed: todo.completed,
                     editing: this.state.editing
                 })
-            }>{element}</li>
+            }>{element}</div>
         );
     }
 }

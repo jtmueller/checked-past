@@ -1,5 +1,6 @@
 'use strict';
 import * as React from 'react';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
 import { Todo } from '../models/todos';
 import TodoItem from './TodoItem';
@@ -31,10 +32,12 @@ class MainSection extends React.Component<MainSectionProps, void> {
         const { todos, actions } = this.props;
         if (todos.length > 0) {
             return (
+                <ListGroupItem>
                 <input className="toggle-all"
                     type="checkbox"
                     checked={completedCount === todos.length}
                     onChange={() => actions.toggleAll()} />
+                </ListGroupItem>
             );
         }
     }
@@ -52,12 +55,13 @@ class MainSection extends React.Component<MainSectionProps, void> {
         
         return (
             <section className="main">
-                { this.renderToggleAll(completedCount) }
-                <ul className="todo-list">
+                <ListGroup>
                     {_.map(filteredTodos, todo =>
-                        <TodoItem key={todo.id} todo={todo} { ...actions }/>
+                        <ListGroupItem key={todo.id}>
+                            <TodoItem todo={todo} { ...actions }/>
+                        </ListGroupItem>
                     )}
-                </ul>
+                </ListGroup>
             </section>
         );
     }
