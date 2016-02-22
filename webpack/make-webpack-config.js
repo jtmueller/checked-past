@@ -44,7 +44,8 @@ module.exports = function(options) {
     new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment"),
     new StatsPlugin(path.join(__dirname, "..", "build", options.development ? "stats-dev.json" : "stats.json"), {
       chunkModules: true
-    })
+    }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ];
 
   Object.keys(stylesheetLoaders).forEach(function(ext) {
