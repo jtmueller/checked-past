@@ -1,8 +1,8 @@
 'use strict';
 import * as React from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, PanelGroup, Panel, Badge } from 'react-bootstrap';
 
-import { Todo, TabType } from '../models/todos';
+import { Todo, TabType, Weekday } from '../models/todos';
 import TodoItem from './TodoItem';
 import Footer from './Footer';
 
@@ -21,6 +21,58 @@ interface MainSectionProps {
     readonly filter: FilterType;
 }
 
+interface ItemListProps { todos: ReadonlyArray<Todo>, actions: any, tab: TabType };
+
+const BasicItemList = ({todos, actions, tab}: ItemListProps) => (
+    <ListGroup>
+        {_.map(todos, todo =>
+            <ListGroupItem key={todo.id}>
+                <TodoItem todo={todo} tab={tab} { ...actions }/>
+            </ListGroupItem>
+        )}
+    </ListGroup>
+);
+
+class WeekdayItemList extends React.Component<ItemListProps, { activeKey?: Weekday }> {
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            activeKey: null
+        };
+    }
+    
+    private handleSelect = (activeKey) => {
+        this.setState({ activeKey });
+    };
+    
+    render() {
+        const { todos, actions, tab } = this.props;
+        const grouped = _.groupBy(todos, t => Weekday[t.weekday]);
+        const days = _.sortBy(_.keys(grouped), dayName => Weekday[dayName]);
+        
+        return (
+            <PanelGroup activeKey={this.state.activeKey || Weekday[days[0]]} onSelect={this.handleSelect} accordion>
+                {_.map(days, day => {
+                    let todos = grouped[day];
+                    let unfinished = _.filter(todos, t => !t.completed).length;
+                    let header = unfinished === 0 ? <span>{day}</span> : <span><Badge>{unfinished}</Badge> {day}</span>;
+                    return (
+                        <Panel header={header} eventKey={Weekday[day]}>
+                            <ListGroup fill>
+                                {_.map(grouped[day], todo =>
+                                    <ListGroupItem key={todo.id}>
+                                        <TodoItem todo={todo} tab={tab} { ...actions }/>
+                                    </ListGroupItem>
+                                )}
+                            </ListGroup>
+                        </Panel>
+                    );
+                })}
+            </PanelGroup>
+        );  
+    }
+}
+
 class MainSection extends React.Component<MainSectionProps, void> {
     handleClearCompleted() {
         const atLeastOneCompleted = _.some(this.props.todos, todo => todo.completed);
@@ -33,12 +85,10 @@ class MainSection extends React.Component<MainSectionProps, void> {
         const { todos, actions } = this.props;
         if (todos.length > 0) {
             return (
-                <ListGroupItem>
                 <input className="toggle-all"
                     type="checkbox"
                     checked={completedCount === todos.length}
                     onChange={() => actions.toggleAll()} />
-                </ListGroupItem>
             );
         }
     }
@@ -56,13 +106,9 @@ class MainSection extends React.Component<MainSectionProps, void> {
         
         return (
             <section className="main">
-                <ListGroup>
-                    {_.map(filteredTodos, todo =>
-                        <ListGroupItem key={todo.id}>
-                            <TodoItem todo={todo} tab={tab} { ...actions }/>
-                        </ListGroupItem>
-                    )}
-                </ListGroup>
+                {tab === TabType.Weekly
+                    ? <WeekdayItemList todos={filteredTodos} tab={tab} actions={actions} />
+                    : <BasicItemList todos={filteredTodos} tab={tab} actions={actions} /> }
             </section>
         );
     }

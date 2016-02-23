@@ -24,7 +24,7 @@ class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputSta
         super(props, context);
         this.state = {
             text: this.props.text || '',
-            day: this.props.selectedWeekday
+            day: this.props.selectedWeekday || Weekday.Monday
         };
     }
 

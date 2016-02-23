@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { Nav, NavItem, Button } from 'react-bootstrap';
 
-import { Todo } from '../models/todos';
+import { Todo, TabType } from '../models/todos';
 import { ShowAll, ShowCompleted, ShowActive, FilterType } from '../constants/TodoFilters';
 
 const FilterTitles = {
@@ -18,12 +18,14 @@ interface FooterProps {
     readonly filter: FilterType;
     readonly clearCompleted: Function;
     readonly setFilter: Function;
+    readonly tab: TabType;
 }
 
 class Footer extends React.Component<FooterProps, void> {
 
     private renderClearButton(completedCount: number) {
-        if (completedCount > 0) {
+        const { tab } = this.props;
+        if (completedCount > 0 && tab !== TabType.Weekly && tab !== TabType.Monthly) {
             return (
                 <Button className="pull-right clear-button"
                     onClick={this.handleClearCompleted}>
@@ -46,7 +48,8 @@ class Footer extends React.Component<FooterProps, void> {
 
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.filter !== nextProps.filter
-            || this.props.todos !== nextProps.todos;
+            || this.props.todos !== nextProps.todos
+            || this.props.tab !== nextProps.tab;
     }
 
     render() {
