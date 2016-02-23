@@ -1,4 +1,4 @@
-This is an example of [TodoMVC](http://todomvc.com/) built using:
+This is a to-do application inspired by Carolyn Foreman. It is built using:
 
 - [React](http://facebook.github.io/react/)
 - [Redux](https://github.com/rackt/redux)
