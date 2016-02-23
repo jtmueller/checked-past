@@ -36,7 +36,7 @@ class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputSta
     private handleKey = (e) => {
         const text = e.target.value.trim();
         if (e.which === 13) { // enter
-            this.props.onSave(text, this.state.day);
+            this.props.onSave(text, this.props.weeklyTodo ? this.state.day : null);
             if (this.props.newTodo) {
                 this.setState({ text: '' });
             }
@@ -49,7 +49,7 @@ class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputSta
     
     private handleSaveClick = () => {
         const { text, day } = this.state;
-        this.props.onSave(text, day);
+        this.props.onSave(text, this.props.weeklyTodo ? day : null);
         this.setState({ text: '' });
     }
     
