@@ -2,6 +2,7 @@
   "name": "todomvc-redux-react-ts",
   "ambientDependencies": {
     "classnames": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
+    "firebase": "github:DefinitelyTyped/DefinitelyTyped/firebase/firebase.d.ts#e2251a6de4ec74c4c71cbb04baccdd261a643909",
     "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#7b7aa2027a8fb6219a8bcf1b6bb12bcd0ff9539d",
     "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#62eedc3121a5e28c50473d2e4a9cefbcb9c3957f",
     "moment": "github:DefinitelyTyped/DefinitelyTyped/moment/moment-node.d.ts#b090bcf9ba9f756ec8ff53e7707269729172a325",

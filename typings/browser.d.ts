@@ -1,4 +1,5 @@
 /// <reference path="browser\ambient\classnames\classnames.d.ts" />
+/// <reference path="browser\ambient\firebase\firebase.d.ts" />
 /// <reference path="browser\ambient\lodash\lodash.d.ts" />
 /// <reference path="browser\ambient\mocha\mocha.d.ts" />
 /// <reference path="browser\ambient\moment\moment.d.ts" />

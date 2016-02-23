@@ -56,16 +56,16 @@ class TodoTabs extends React.Component<TodoTabProps, void> {
         return (
             <Nav bsStyle="tabs" activeKey={state.activeTab} onSelect={this.handleSelect}>
                 <NavItem key={0} eventKey={TabType.Weekly} title="Weekly tasks reset to incomplete every week at midnight on the specified day.">
-                    Weekly <UndoneBadge count={weeklyCount} />
+                    <UndoneBadge count={weeklyCount} /> Weekly
                 </NavItem>
                 <NavItem key={1} eventKey={TabType.Monthly} title="Monthly tasks reset to incomplete on the first of every month.">
-                    Monthly <UndoneBadge count={monthlyCount} />
+                    <UndoneBadge count={monthlyCount} /> Monthly
                 </NavItem>
                 <NavItem key={2} eventKey={TabType.Todos}>
-                    Todos <UndoneBadge count={todoCount} />
+                    <UndoneBadge count={todoCount} /> Todos
                 </NavItem>
                 <NavItem key={3} eventKey={TabType.Shopping}>
-                    Shopping <UndoneBadge count={shoppingCount} />
+                    <UndoneBadge count={shoppingCount} /> Shopping
                 </NavItem>
             </Nav>
         ); 
