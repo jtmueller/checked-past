@@ -48,7 +48,7 @@ export class WeekdayItemList extends React.Component<ItemListProps, { activeKey?
                     return (
                         <Panel header={header} key={key} eventKey={key}>
                             <ListGroup fill>
-                                {_.map(grouped[day], todo =>
+                                {_.map(todos, todo =>
                                     <ListGroupItem key={todo.id}>
                                         <TodoItem todo={todo} tab={tab} { ...actions }/>
                                     </ListGroupItem>
