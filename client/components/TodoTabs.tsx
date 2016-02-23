@@ -1,6 +1,7 @@
 'use strict';
 import * as React from 'react';
 import { Nav, NavItem, Badge, Panel } from 'react-bootstrap';
+import * as _ from 'lodash';
 
 import { AppState, TabType, Todo } from '../models/todos';
 import MainSection from './MainSection';
@@ -70,7 +71,7 @@ class TodoTabs extends React.Component<TodoTabProps, void> {
         ); 
     }
     
-    render () {
+    render() {
         const todos = this.getSelectedTodos();
         const { actions, state } = this.props;
 
@@ -78,8 +79,7 @@ class TodoTabs extends React.Component<TodoTabProps, void> {
             <div>
                 {this.renderTabs(state)}
                 <div className="tab-content">
-                    <Panel className="todo-list tab-pane active"
-                        footer={this.renderFooter(todos)}>
+                    <Panel className="todo-list tab-pane active" footer={this.renderFooter(todos)}>
                         <Header addTodo={actions.addTodo} tab={state.activeTab} />
                         <MainSection todos={todos} tab={state.activeTab} actions={actions} filter={state.filter} />
                     </Panel>

@@ -1,7 +1,7 @@
 'use strict';
-
 import * as React from 'react';
 import { Button, Glyphicon, Input, DropdownButton, MenuItem } from 'react-bootstrap';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Weekday } from '../models/todos';
 
