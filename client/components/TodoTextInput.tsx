@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Button, Glyphicon, Input, DropdownButton, MenuItem } from 'react-bootstrap';
+import * as moment from 'moment';
 import { Weekday } from '../models/todos';
 
 interface TodoTextInputProps {
@@ -22,9 +23,13 @@ interface TodoTextInputState {
 class TodoTextInput extends React.Component<TodoTextInputProps, TodoTextInputState> {
     constructor(props, context) {
         super(props, context);
+        let defaultDay = this.props.selectedWeekday || moment().weekday();
+        if (defaultDay < Weekday.Monday || defaultDay > Weekday.Friday) {
+            defaultDay = Weekday.Monday;
+        }
         this.state = {
             text: this.props.text || '',
-            day: this.props.selectedWeekday || Weekday.Monday
+            day: this.props.selectedWeekday || defaultDay
         };
     }
 

@@ -2,7 +2,7 @@ body {
     padding-top: 15px;
 }
 
-.todo-list, .todo-list .panel-body, .todo-list .panel-footer {
+.todo-list, .todo-list .panel-body, .todo-list .panel-footer, .main .panel {
     background-color: transparent;
 }
 
