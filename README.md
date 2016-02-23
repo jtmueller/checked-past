@@ -6,6 +6,9 @@ This is a to-do application inspired by Carolyn Foreman. It is built using:
 
 It is adapted from the [redux TodoMVC example](https://github.com/rackt/redux/tree/master/examples/todomvc).
 
+This application has weekly recurring tasks that reset to incomplete every week at midnight on the indicated day.
+It also has monthly recurring tasks that reset to incomplete at midnight on the first of every month, and standard to-do and shopping lists.
+
 ## Getting Started
 
 Requirement:
