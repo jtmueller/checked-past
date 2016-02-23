@@ -10,9 +10,9 @@ interface HeaderProps {
 };
 
 class Header extends React.Component<HeaderProps, any> {
-    handleSave(text) {
+    handleSave(text, day) {
         if (text.length !== 0) {
-            this.props.addTodo(text);
+            this.props.addTodo(text, day);
         }
     }
 
@@ -27,6 +27,7 @@ class Header extends React.Component<HeaderProps, any> {
                 <h2>{title}</h2>
                 <TodoTextInput
                     newTodo
+                    weeklyTodo={this.props.tab === TabType.Weekly}
                     onSave={this.handleSave.bind(this) }
                     placeholder="What needs to be done?" />
             </header>

@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { handleActions } from 'redux-actions';
 
-import { Todo, AppState, TabType } from '../models/todos';
+import { Todo, AppState, TabType, Weekday } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
 import { ShowAll, ShowCompleted, FilterType } from '../constants/TodoFilters';
 
@@ -57,16 +57,16 @@ function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
 }
 
 export default handleActions<AppState>({
-    [ActionType.AddTodo]: (state: AppState, action: Action<string>): AppState => {
-        const todoText = action.payload;
-        if (!todoText) {
+    [ActionType.AddTodo]: (state: AppState, action: Action<{ text: string, weekday?: Weekday }>): AppState => {
+        const { text, weekday } = action.payload;
+        if (!text) {
             return state;
         }
         const curValues = getTabProp(state);
         const newEntry: Todo = {
             id: _.reduce(curValues, (maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
             completed: false,
-            text: todoText,
+            text, weekday,
             lastModified: moment.utc().toDate()
         };
         const values = [newEntry, ...curValues];
@@ -79,23 +79,24 @@ export default handleActions<AppState>({
         return updateTabProp(state, values);
     },
 
-    [ActionType.EditTodo]: (state: AppState, {payload: {todo, newText}}: Action<{ todo: Todo, newText: string }>): AppState => {
-        if (!newText || todo.text === newText) {
+    [ActionType.EditTodo]: (state: AppState, action: Action<{ todo: Todo, newText: string, newWeekday?: Weekday }>): AppState => {
+        const { todo, newText, newWeekday } = action.payload;
+        if (newWeekday === todo.weekday && (!newText || todo.text === newText)) {
             return state;
         }
-        const { id, completed } = todo;
+        const { id, completed, weekday } = todo;
         const curValues = getTabProp(state);
         const values = _.map(curValues, cur => cur.id !== id ? cur :
-            { id, completed, text: newText, lastModified: moment.utc().toDate() }
+            { id, completed, text: newText, lastModified: moment.utc().toDate(), weekday: newWeekday || weekday }
         );
         return updateTabProp(state, values);
     },
 
     [ActionType.ToggleTodo]: (state: AppState, {payload: todo}: Action<Todo>): AppState => {
-        const { id, text, completed } = todo;
+        const { id, text, completed, weekday } = todo;
         const curValues = getTabProp(state);
         const values = _.map(curValues, cur => cur.id !== id ? cur :
-            { id, completed: !completed, text, lastModified: moment.utc().toDate() } 
+            { id, completed: !completed, text, lastModified: moment.utc().toDate(), weekday } 
         );
         return updateTabProp(state, values);
     },
@@ -105,7 +106,7 @@ export default handleActions<AppState>({
         const areAllMarked = _.every(state.todos, todo => todo.completed);
         const curValues = getTabProp(state);
         const values: Todo[] = _.map(curValues, todo => (
-            { id: todo.id, text: todo.text, completed: !areAllMarked, lastModified: moment.utc().toDate() }
+            { id: todo.id, text: todo.text, completed: !areAllMarked, lastModified: moment.utc().toDate(), weekday: todo.weekday }
         ));
         return updateTabProp(state, values);
     },

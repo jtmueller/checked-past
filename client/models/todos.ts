@@ -1,14 +1,6 @@
 'use strict';
 import { FilterType } from '../constants/TodoFilters';
 
-export interface Todo {
-    readonly id?: number;
-    readonly text: string;
-    readonly completed: boolean;
-    readonly lastModified: Date;
-    readonly resetDate?: Date;
-}
-
 export enum TabType {
     /** Montly tasks reset on the first of each month. */
     Monthly,
@@ -18,6 +10,24 @@ export enum TabType {
     Todos, 
     /** Shopping lists do not auto-reset. */
     Shopping
+}
+
+export enum Weekday {
+    Sunday = 0,
+    Monday = 1,
+    Tuesday = 2,
+    Wednesday = 3,
+    Thursday = 4,
+    Friday = 5,
+    Saturday = 6
+}
+
+export interface Todo {
+    readonly id?: number;
+    readonly text: string;
+    readonly completed: boolean;
+    readonly lastModified: Date;
+    readonly weekday?: Weekday
 }
 
 export interface AppState {

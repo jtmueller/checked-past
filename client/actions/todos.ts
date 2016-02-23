@@ -3,7 +3,7 @@
 import * as moment from 'moment';
 import { createAction, Action } from 'redux-actions';
 
-import { Todo, TabType } from '../models/todos';
+import { Todo, TabType, Weekday } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
 import { FilterType } from '../constants/TodoFilters';
 
@@ -17,9 +17,9 @@ setInterval(() => {
     })
 }, 60 * 1000);
 
-export const addTodo = createAction<string>(
+export const addTodo = createAction<{ text: string, weekday?: Weekday }>(
     ActionType.AddTodo,
-    (text: string) => text.trim()
+    (text: string, weekday?: Weekday) => ({ text: text.trim(), weekday })
 );
 
 export const deleteTodo = createAction<Todo>(
@@ -27,9 +27,9 @@ export const deleteTodo = createAction<Todo>(
     (todo: Todo) => todo
 );
 
-export const editTodo = createAction<{ todo: Todo, newText: string }>(
+export const editTodo = createAction<{ todo: Todo, newText: string, newWeekday?: Weekday }>(
     ActionType.EditTodo,
-    (todo: Todo, newText: string) => ({ todo, newText: newText.trim() })
+    (todo: Todo, newText: string, weekday?: Weekday) => ({ todo, newText: newText.trim(), newWeekday: weekday })
 );
 
 export const completeTodo = createAction<Todo>(

@@ -5,11 +5,12 @@ import { Glyphicon } from 'react-bootstrap';
 import * as classNames from 'classnames';
 import * as moment from 'moment';
 
-import { Todo } from '../models/todos';
+import { Todo, TabType, Weekday } from '../models/todos';
 import TodoTextInput from './TodoTextInput';
 
 interface TodoItemProps {
     readonly todo: Todo;
+    readonly tab: TabType;
     readonly editTodo: Function;
     readonly deleteTodo: Function;
     readonly completeTodo: Function;
@@ -31,11 +32,11 @@ class TodoItem extends React.Component<TodoItemProps, TodoItemState> {
         this.setState({ editing: true });
     }
 
-    handleSave(todo, text) {
+    handleSave(todo: Todo, text: string, day?: Weekday) {
         if (text.length === 0) {
             this.props.deleteTodo(todo);
         } else {
-            this.props.editTodo(todo, text);
+            this.props.editTodo(todo, text, day);
         }
         this.setState({ editing: false });
     }
@@ -45,14 +46,15 @@ class TodoItem extends React.Component<TodoItemProps, TodoItemState> {
     }
 
     render() {
-        const { todo, completeTodo, deleteTodo } = this.props;
+        const { todo, completeTodo, deleteTodo, tab } = this.props;
         
         let element: JSX.Element;
         if (this.state.editing) {
             element = (
                 <TodoTextInput text={todo.text}
-                    editing={this.state.editing}
-                    onSave={(text) => this.handleSave(todo, text) }/>
+                    editing={this.state.editing} 
+                    weeklyTodo={tab === TabType.Weekly} selectedWeekday={todo.weekday}
+                    onSave={(text, day) => this.handleSave(todo, text, day) }/>
             );
         } else {
             let lastModified = moment(todo.lastModified).local().fromNow();

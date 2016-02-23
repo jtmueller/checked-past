@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import { Todo } from '../models/todos';
+import { Todo, TabType } from '../models/todos';
 import TodoItem from './TodoItem';
 import Footer from './Footer';
 
@@ -16,6 +16,7 @@ const TodoFilters = {
 
 interface MainSectionProps {
     readonly todos: ReadonlyArray<Todo>;
+    readonly tab: TabType;
     readonly actions: any;
     readonly filter: FilterType;
 }
@@ -47,7 +48,7 @@ class MainSection extends React.Component<MainSectionProps, void> {
     }
 
     render() {
-        const { todos, actions, filter } = this.props;
+        const { todos, actions, filter, tab } = this.props;
 
         const filteredTodos = _.filter(todos, TodoFilters[filter]);
         const completedCount = _.reduce(todos, (count: number, todo:Todo) => 
@@ -58,7 +59,7 @@ class MainSection extends React.Component<MainSectionProps, void> {
                 <ListGroup>
                     {_.map(filteredTodos, todo =>
                         <ListGroupItem key={todo.id}>
-                            <TodoItem todo={todo} { ...actions }/>
+                            <TodoItem todo={todo} tab={tab} { ...actions }/>
                         </ListGroupItem>
                     )}
                 </ListGroup>
