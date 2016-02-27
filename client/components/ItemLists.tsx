@@ -45,6 +45,7 @@ export class WeekdayItemList extends React.Component<ItemListProps, { activeKey?
                     let unfinished = _.filter(todos, t => !t.completed).length;
                     let header = unfinished === 0 ? <span>{day}</span> : <span><Badge>{unfinished}</Badge> {day}</span>;
                     let key = Weekday[day];
+                    
                     return (
                         <Panel header={header} key={key} eventKey={key}>
                             <ListGroup fill>

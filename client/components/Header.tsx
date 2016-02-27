@@ -2,14 +2,15 @@
 
 import * as React from 'react';
 import TodoTextInput from './TodoTextInput';
-import { TabType } from '../models/todos';
+import { TabType, User } from '../models/todos';
 
 interface HeaderProps {
     addTodo: Function;
     tab: TabType;
+    curUser: User;
 };
 
-class Header extends React.Component<HeaderProps, any> {
+class Header extends React.Component<HeaderProps, void> {
     handleSave(text, day) {
         if (text.length !== 0) {
             this.props.addTodo(text, day);
@@ -21,15 +22,19 @@ class Header extends React.Component<HeaderProps, any> {
     }
 
     render() {
+        const { name } = this.props.curUser;
         let title = TabType[this.props.tab].toLowerCase();
         return (
             <header className="header">
-                <h2>{title}</h2>
                 <TodoTextInput
                     newTodo
                     weeklyTodo={this.props.tab === TabType.Weekly}
-                    onSave={this.handleSave.bind(this) }
+                    onSave={this.handleSave.bind(this)}
                     placeholder="What needs to be done?" />
+                <div className="watermark">
+                    <h2>{title}</h2>
+                    <span>{name}</span>
+                </div>
             </header>
         );
     }

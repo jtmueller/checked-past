@@ -30,6 +30,12 @@ export interface Todo {
     readonly weekday?: Weekday
 }
 
+export interface User {
+    readonly userId: string;
+    readonly name: string;
+    readonly avatarUrl: string;
+}
+
 export interface AppState {
     readonly monthlyTasks: ReadonlyArray<Todo>;
     readonly weeklyTasks: ReadonlyArray<Todo>;
@@ -37,4 +43,14 @@ export interface AppState {
     readonly shopping: ReadonlyArray<Todo>;
     readonly activeTab: TabType;
     readonly filter: FilterType;
+    readonly curUser?: User;
 }
+
+export interface Action<T> {
+    type: string;
+    payload?: T;
+    error?: boolean;
+    meta?: any;
+}
+
+export type Dispatcher<T> = (action:Action<T>) => void;

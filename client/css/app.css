@@ -20,17 +20,27 @@ body {
     color: silver;
 }
 
-.nav, .dropdown-menu li {
+.nav, .dropdown-menu li, .watermark, .lastModified {
     font-family: "Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-.header h2 {
+.header .watermark {
     position: absolute;
-    bottom: 65px;
+    bottom: 20px;
     right: 16px;
+    z-index: -1;
+}
+
+.watermark h2 {
     color: #dddddd;
     font-size: 65px;
-    z-index: -1;
+}
+
+.watermark span {
+    color: #dddddd;
+    font-size: 10px;
+    float: right;
+    margin-top: 28px;
 }
 
 .header input, .header button, .main .list-group-item {

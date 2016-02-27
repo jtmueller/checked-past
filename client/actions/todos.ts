@@ -2,12 +2,35 @@
 
 import * as moment from 'moment';
 import { createAction, Action } from 'redux-actions';
+import * as Firebase from 'firebase';
 
-import { Todo, TabType, Weekday } from '../models/todos';
+import { Dispatcher, User, Todo, TabType, Weekday } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
 import { FilterType } from '../constants/TodoFilters';
 
 import { store } from '../main';
+
+const dbRoot = new Firebase('https://checked-past.firebaseio.com/');
+
+const handleAuth = (authData:FirebaseAuthData) => {
+    if (!authData) return;
+    const { displayName, profileImageURL } = authData[authData.provider];
+    if (store) {
+        store.dispatch({
+            type: ActionType.Auth,
+            payload: {
+                userId: authData.uid,
+                name: displayName,
+                avatarUrl: profileImageURL
+            }
+        })
+    }
+    else {
+        setTimeout(() => handleAuth(authData), 250);
+    }
+};
+
+dbRoot.onAuth(handleAuth);
 
 // redraw the list every minute so that the timestamps update
 setInterval(() => {
@@ -56,3 +79,12 @@ export const setFilter = createAction<FilterType>(
     ActionType.SetFilter,
     (filter: FilterType) => filter
 )
+
+export const login = () =>
+    (dispatch: Dispatcher<User>) => {
+        dbRoot.authWithOAuthRedirect('google', (error) => {
+            if (error) {
+                console.error('Authenticaton Error', error);
+            }
+        });
+    };

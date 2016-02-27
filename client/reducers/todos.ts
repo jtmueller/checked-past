@@ -4,16 +4,9 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { handleActions } from 'redux-actions';
 
-import { Todo, AppState, TabType, Weekday } from '../models/todos';
+import { Action, Todo, AppState, TabType, Weekday, User } from '../models/todos';
 import * as ActionType from '../constants/ActionTypes';
 import { ShowAll, ShowCompleted, FilterType } from '../constants/TodoFilters';
-
-interface Action<T> {
-    type: string;
-    payload?: T;
-    error?: boolean;
-    meta?: any;
-}
 
 const initialState: AppState = {
     monthlyTasks: [] as Todo[],
@@ -36,7 +29,7 @@ function getTabProp(state:AppState) {
 }
 
 function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
-    let { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = state;
+    let { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = state;
     switch (state.activeTab) {
         case TabType.Monthly:
             monthlyTasks = values;
@@ -53,7 +46,7 @@ function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
         default:
             throw new Error(`Unknown tab type: '${state.activeTab}' (${TabType[state.activeTab]}).`);
     }
-    return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter };
+    return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser };
 }
 
 export default handleActions<AppState>({
@@ -114,27 +107,32 @@ export default handleActions<AppState>({
     [ActionType.ClearCompleted]: (state: AppState, action: Action<void>): AppState => {
         const curValues = getTabProp(state);
         const values = _.filter(curValues, todo => todo.completed === false);
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = updateTabProp(state, values);
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = updateTabProp(state, values);
         return { 
             filter: filter === ShowCompleted ? ShowAll : filter,
-            monthlyTasks, weeklyTasks, todos, shopping, activeTab 
+            monthlyTasks, weeklyTasks, todos, shopping, activeTab, curUser 
         };
     },
     
     [ActionType.RefreshTimes]: (state: AppState, action: Action<void>): AppState => {
         // this is just to get the UI to redraw the timestamps, so no changes, but we have to return
         // a different state instance or redux decides that nothing changed and does not re-render
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter };
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser };
     },
     
     [ActionType.ChangeTab]: (state: AppState, action: Action<TabType>): AppState => {
-        const { monthlyTasks, weeklyTasks, todos, shopping, filter } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab: action.payload, filter };
+        const { monthlyTasks, weeklyTasks, todos, shopping, filter, curUser } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab: action.payload, filter, curUser };
     },
     
     [ActionType.SetFilter]: (state: AppState, action: Action<FilterType>): AppState => {
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter: action.payload };
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, curUser } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter: action.payload, curUser };
+    },
+    
+    [ActionType.Auth]: (state: AppState, action: Action<User>): AppState => {
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser: action.payload };
     }
 }, initialState);

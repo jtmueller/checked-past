@@ -80,7 +80,7 @@ class TodoTabs extends React.Component<TodoTabProps, void> {
                 {this.renderTabs(state)}
                 <div className="tab-content">
                     <Panel className="todo-list tab-pane active" footer={this.renderFooter(todos)}>
-                        <Header addTodo={actions.addTodo} tab={state.activeTab} />
+                        <Header addTodo={actions.addTodo} tab={state.activeTab} curUser={state.curUser} />
                         <MainSection todos={todos} tab={state.activeTab} actions={actions} filter={state.filter} />
                     </Panel>
                 </div>

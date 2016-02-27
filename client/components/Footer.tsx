@@ -5,7 +5,7 @@ import * as classNames from 'classnames';
 import * as _ from 'lodash';
 import { Nav, NavItem, Button } from 'react-bootstrap';
 
-import { Todo, TabType } from '../models/todos';
+import { Todo, TabType, User } from '../models/todos';
 import { ShowAll, ShowCompleted, ShowActive, FilterType } from '../constants/TodoFilters';
 
 const FilterTitles = {

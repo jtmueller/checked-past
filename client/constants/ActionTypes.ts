@@ -3,7 +3,7 @@
 export type ActionType =
     'ADD_TODO' | 'DELETE_TODO' | 'EDIT_TODO' | 'TOGGLE_TODO' |
     'TOGGLE_ALL' | 'CLEAR_COMPLETED' | 'REFRESH_TIMES' | 'CHANGE_TAB' |
-    'SET_FILTER';
+    'SET_FILTER' | 'AUTH';
 
 export const AddTodo: ActionType = 'ADD_TODO';
 export const DeleteTodo: ActionType = 'DELETE_TODO';
@@ -14,3 +14,4 @@ export const ClearCompleted: ActionType = 'CLEAR_COMPLETED';
 export const RefreshTimes: ActionType = 'REFRESH_TIMES';
 export const ChangeTab: ActionType = 'CHANGE_TAB';
 export const SetFilter: ActionType = 'SET_FILTER';
+export const Auth: ActionType = 'AUTH';
