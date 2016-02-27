@@ -23,10 +23,10 @@ export enum Weekday {
 }
 
 export interface Todo {
-    readonly id?: number;
+    readonly id?: string;
     readonly text: string;
     readonly completed: boolean;
-    readonly lastModified: Date;
+    readonly lastModified: number;
     readonly weekday?: Weekday
 }
 
@@ -47,10 +47,15 @@ export interface AppState {
 }
 
 export interface Action<T> {
-    type: string;
-    payload?: T;
-    error?: boolean;
-    meta?: any;
+    readonly type: string;
+    readonly payload?: T;
+    readonly error?: boolean;
+    readonly meta?: any;
 }
 
 export type Dispatcher<T> = (action:Action<T>) => void;
+
+export interface ActionContext {
+    readonly user: User;
+    readonly tab: TabType;
+}

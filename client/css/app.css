@@ -24,6 +24,10 @@ body {
     font-family: "Raleway","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+.nav-tabs li.active a {
+    height: 45px;
+}
+
 .header .watermark {
     position: absolute;
     bottom: 20px;

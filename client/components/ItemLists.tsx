@@ -4,16 +4,21 @@ import { ListGroup, ListGroupItem, PanelGroup, Panel, Badge } from 'react-bootst
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { Todo, TabType, Weekday } from '../models/todos';
+import { Todo, TabType, Weekday, User } from '../models/todos';
 import TodoItem from './TodoItem';
 
-interface ItemListProps { todos: ReadonlyArray<Todo>, actions: any, tab: TabType };
+interface ItemListProps { 
+    todos: ReadonlyArray<Todo>, 
+    actions: any, 
+    tab: TabType,
+    user: User
+};
 
-export const BasicItemList = ({todos, actions, tab}: ItemListProps) => (
+export const BasicItemList = ({todos, actions, tab, user}: ItemListProps) => (
     <ListGroup>
         {_.map(todos, todo =>
             <ListGroupItem key={todo.id}>
-                <TodoItem todo={todo} tab={tab} { ...actions }/>
+                <TodoItem todo={todo} tab={tab} user={user} { ...actions }/>
             </ListGroupItem>
         )}
     </ListGroup>
@@ -32,7 +37,7 @@ export class WeekdayItemList extends React.Component<ItemListProps, { activeKey?
     };
     
     render() {
-        const { todos, actions, tab } = this.props;
+        const { todos, actions, tab, user } = this.props;
         const grouped = _.groupBy(todos, t => Weekday[t.weekday]);
         const days = _.sortBy(_.keys(grouped), dayName => Weekday[dayName]);
         const activeKey = _.some(todos, todo => todo.weekday === this.state.activeKey)
@@ -51,7 +56,7 @@ export class WeekdayItemList extends React.Component<ItemListProps, { activeKey?
                             <ListGroup fill>
                                 {_.map(todos, todo =>
                                     <ListGroupItem key={todo.id}>
-                                        <TodoItem todo={todo} tab={tab} { ...actions }/>
+                                        <TodoItem todo={todo} tab={tab} user={user} { ...actions }/>
                                     </ListGroupItem>
                                 )}
                             </ListGroup>

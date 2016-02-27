@@ -8,6 +8,12 @@ import { Action, Todo, AppState, TabType, Weekday, User } from '../models/todos'
 import * as ActionType from '../constants/ActionTypes';
 import { ShowAll, ShowCompleted, FilterType } from '../constants/TodoFilters';
 
+interface TodoUpdate {
+    tab: TabType;
+    todo: Todo;
+    prevId?: string;
+}
+
 const initialState: AppState = {
     monthlyTasks: [] as Todo[],
     weeklyTasks: [] as Todo[],
@@ -17,8 +23,8 @@ const initialState: AppState = {
     filter: 'show_all'
 };
 
-function getTabProp(state:AppState) {
-    switch (state.activeTab) {
+function getTabProp(state:AppState, tab?: TabType) {
+    switch (tab || state.activeTab) {
         case TabType.Monthly: return state.monthlyTasks;
         case TabType.Weekly: return state.weeklyTasks;
         case TabType.Todos: return state.todos;
@@ -28,9 +34,9 @@ function getTabProp(state:AppState) {
     }
 }
 
-function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
+function updateTabProp(state: AppState, values: ReadonlyArray<Todo>, tab?: TabType): AppState {
     let { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = state;
-    switch (state.activeTab) {
+    switch (tab || state.activeTab) {
         case TabType.Monthly:
             monthlyTasks = values;
             break;
@@ -50,58 +56,34 @@ function updateTabProp(state: AppState, values: ReadonlyArray<Todo>): AppState {
 }
 
 export default handleActions<AppState>({
-    [ActionType.AddTodo]: (state: AppState, action: Action<{ text: string, weekday?: Weekday }>): AppState => {
-        const { text, weekday } = action.payload;
-        if (!text) {
-            return state;
+    [ActionType.AddTodo]: (state: AppState, action: Action<TodoUpdate>): AppState => {
+        const { tab, todo, prevId } = action.payload;
+        const curValues = getTabProp(state, tab);
+        const lastIndex = prevId ? _.findIndex(curValues, t => t.id === prevId) : -1;
+        if (lastIndex === -1) {
+            const values = [...curValues, todo];
+            return updateTabProp(state, values, tab);
         }
-        const curValues = getTabProp(state);
-        const newEntry: Todo = {
-            id: _.reduce(curValues, (maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-            completed: false,
-            text, weekday,
-            lastModified: moment.utc().toDate()
-        };
-        const values = [newEntry, ...curValues];
-        return updateTabProp(state, values);
+        
+        let left = _.take(curValues, lastIndex + 1);
+        let right = _.takeRight(curValues, curValues.length - left.length);
+        
+        const values = [...left, todo, ...right];
+        return updateTabProp(state, values, tab);
     },
 
-    [ActionType.DeleteTodo]: (state: AppState, action: Action<Todo>): AppState => {
-        const curValues = getTabProp(state);
-        const values = _.filter(curValues, todo => todo.id !== action.payload.id);
-        return updateTabProp(state, values);
+    [ActionType.DeleteTodo]: (state: AppState, action: Action<{tab: TabType; deleteId: string}>): AppState => {
+        const { tab, deleteId } = action.payload;
+        const curValues = getTabProp(state, tab);
+        const values = _.filter(curValues, t => t.id !== deleteId);
+        return updateTabProp(state, values, tab);
     },
 
-    [ActionType.EditTodo]: (state: AppState, action: Action<{ todo: Todo, newText: string, newWeekday?: Weekday }>): AppState => {
-        const { todo, newText, newWeekday } = action.payload;
-        if (newWeekday === todo.weekday && (!newText || todo.text === newText)) {
-            return state;
-        }
-        const { id, completed, weekday } = todo;
-        const curValues = getTabProp(state);
-        const values = _.map(curValues, cur => cur.id !== id ? cur :
-            { id, completed, text: newText, lastModified: moment.utc().toDate(), weekday: newWeekday || weekday }
-        );
-        return updateTabProp(state, values);
-    },
-
-    [ActionType.ToggleTodo]: (state: AppState, {payload: todo}: Action<Todo>): AppState => {
-        const { id, text, completed, weekday } = todo;
-        const curValues = getTabProp(state);
-        const values = _.map(curValues, cur => cur.id !== id ? cur :
-            { id, completed: !completed, text, lastModified: moment.utc().toDate(), weekday } 
-        );
-        return updateTabProp(state, values);
-    },
-
-    [ActionType.ToggleAll]: (state: AppState, action: Action<void>): AppState => {
-        const { monthlyTasks, weeklyTasks, shopping, activeTab } = state;
-        const areAllMarked = _.every(state.todos, todo => todo.completed);
-        const curValues = getTabProp(state);
-        const values: Todo[] = _.map(curValues, todo => (
-            { id: todo.id, text: todo.text, completed: !areAllMarked, lastModified: moment.utc().toDate(), weekday: todo.weekday }
-        ));
-        return updateTabProp(state, values);
+    [ActionType.EditTodo]: (state: AppState, action: Action<TodoUpdate>): AppState => {
+        const { tab, todo } = action.payload;
+        const curValues = getTabProp(state, tab);
+        const values = _.map(curValues, cur => cur.id === todo.id ? todo : cur);
+        return updateTabProp(state, values, tab);
     },
 
     [ActionType.ClearCompleted]: (state: AppState, action: Action<void>): AppState => {

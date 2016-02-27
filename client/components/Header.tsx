@@ -13,7 +13,8 @@ interface HeaderProps {
 class Header extends React.Component<HeaderProps, void> {
     handleSave(text, day) {
         if (text.length !== 0) {
-            this.props.addTodo(text, day);
+            const { tab, curUser, addTodo } = this.props;
+            addTodo({ user: curUser, tab }, text, day);
         }
     }
 
@@ -24,6 +25,7 @@ class Header extends React.Component<HeaderProps, void> {
     render() {
         const { name } = this.props.curUser;
         let title = TabType[this.props.tab].toLowerCase();
+        let slogan = `${name}'s Checked Past`
         return (
             <header className="header">
                 <TodoTextInput
@@ -33,7 +35,7 @@ class Header extends React.Component<HeaderProps, void> {
                     placeholder="What needs to be done?" />
                 <div className="watermark">
                     <h2>{title}</h2>
-                    <span>{name}</span>
+                    <span>{slogan}</span>
                 </div>
             </header>
         );
