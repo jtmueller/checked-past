@@ -24,9 +24,10 @@ const initialState: AppState = {
 };
 
 function getTabProp(state:AppState, tab?: TabType) {
+    //console.log('getTabProp', TabType[tab || state.activeTab], state);
     switch (tab || state.activeTab) {
-        case TabType.Monthly: return state.monthlyTasks;
         case TabType.Weekly: return state.weeklyTasks;
+        case TabType.Monthly: return state.monthlyTasks;
         case TabType.Todos: return state.todos;
         case TabType.Shopping: return state.shopping;
         default:
@@ -35,13 +36,14 @@ function getTabProp(state:AppState, tab?: TabType) {
 }
 
 function updateTabProp(state: AppState, values: ReadonlyArray<Todo>, tab?: TabType): AppState {
+    //console.log('setTabProp', TabType[tab || state.activeTab], values);
     let { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = state;
     switch (tab || state.activeTab) {
-        case TabType.Monthly:
-            monthlyTasks = values;
-            break;
         case TabType.Weekly:
             weeklyTasks = values;
+            break;
+        case TabType.Monthly:
+            monthlyTasks = values;
             break;
         case TabType.Todos:
             todos = values;
@@ -58,17 +60,11 @@ function updateTabProp(state: AppState, values: ReadonlyArray<Todo>, tab?: TabTy
 export default handleActions<AppState>({
     [ActionType.AddTodo]: (state: AppState, action: Action<TodoUpdate>): AppState => {
         const { tab, todo, prevId } = action.payload;
+        //console.log('AddTodo', TabType[tab], todo);
         const curValues = getTabProp(state, tab);
-        const lastIndex = prevId ? _.findIndex(curValues, t => t.id === prevId) : -1;
-        if (lastIndex === -1) {
-            const values = [...curValues, todo];
-            return updateTabProp(state, values, tab);
-        }
+        //const lastIndex = prevId ? _.findIndex(curValues, t => t.id === prevId) : -1;
         
-        let left = _.take(curValues, lastIndex + 1);
-        let right = _.takeRight(curValues, curValues.length - left.length);
-        
-        const values = [...left, todo, ...right];
+        const values = [...curValues, todo];
         return updateTabProp(state, values, tab);
     },
 

@@ -51,7 +51,7 @@ const getTabProp = (tab: TabType) => {
 const setupEventHandlers = (user:User) => {
     let disposeCalls: Function[] = [];
     
-    for (let tab of [TabType.Monthly, TabType.Weekly, TabType.Todos, TabType.Shopping]) {
+    for (let tab of [TabType.Weekly, TabType.Monthly, TabType.Todos, TabType.Shopping]) {
         let tabProp = getTabProp(tab);
         let todos = dbRoot.child(`${user.userId}/${tabProp}`);
         

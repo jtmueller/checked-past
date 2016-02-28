@@ -3,13 +3,13 @@ import { FilterType } from '../constants/TodoFilters';
 
 export enum TabType {
     /** Montly tasks reset on the first of each month. */
-    Monthly,
+    Monthly = 1,
     /** Weekly tasks reset on the associated weekday (once per week). */
-    Weekly, 
+    Weekly = 2, 
     /** General to-dos do not auto-reset. */
-    Todos, 
+    Todos = 3, 
     /** Shopping lists do not auto-reset. */
-    Shopping
+    Shopping = 4
 }
 
 export enum Weekday {
