@@ -29,11 +29,11 @@ class TodoItem extends React.Component<TodoItemProps, TodoItemState> {
         };
     }
 
-    handleDoubleClick() {
+    private handleDoubleClick() {
         this.setState({ editing: true });
     }
 
-    handleSave(ctx: ActionContext, todo: Todo, text: string, day?: Weekday) {
+    private handleSave(ctx: ActionContext, todo: Todo, text: string, day?: Weekday) {
         if (text.length === 0) {
             this.props.deleteTodo(ctx, todo);
         } else {

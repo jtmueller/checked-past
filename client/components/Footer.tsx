@@ -19,6 +19,7 @@ interface FooterProps {
     readonly filter: FilterType;
     readonly clearCompleted: Function;
     readonly setFilter: Function;
+    readonly uncheckAll: Function;
     readonly tab: TabType;
     readonly user: User;
 }
@@ -26,14 +27,24 @@ interface FooterProps {
 class Footer extends React.Component<FooterProps, void> {
 
     private renderClearButton(completedCount: number) {
+        if (!completedCount) return;
         const { tab } = this.props;
-        if (completedCount > 0 && tab !== TabType.Weekly && tab !== TabType.Monthly) {
-            return (
-                <Button className="pull-right clear-button"
-                    onClick={this.handleClearCompleted}>
-                    Clear completed
-                </Button>
-            );
+        switch (tab) {
+            case TabType.Weekly:
+            case TabType.Monthly:
+                return (
+                    <Button className="pull-right clear-button"
+                        onClick={this.handleUncheckAll}>
+                        Uncheck All
+                    </Button>
+                );
+            default:
+                return (
+                    <Button className="pull-right clear-button"
+                        onClick={this.handleClearCompleted}>
+                        Clear completed
+                    </Button>
+                );
         }
     }
     
@@ -42,6 +53,14 @@ class Footer extends React.Component<FooterProps, void> {
         const atLeastOneCompleted = _.some(todos, todo => todo.completed);
         if (atLeastOneCompleted) {
             clearCompleted({ user, tab });
+        }
+    }
+    
+    private handleUncheckAll = () => {
+        const { todos, user, tab, uncheckAll } = this.props;
+        const atLeastOneCompleted = _.some(todos, todo => todo.completed);
+        if (atLeastOneCompleted) {
+            uncheckAll({ user, tab });
         }
     }
     

@@ -150,6 +150,20 @@ export const clearCompleted = ({user, tab}: ActionContext) => (dispatch) => {
     });
 };
 
+export const uncheckAll = ({user, tab}: ActionContext) => (dispatch) => {
+    let tasks = dbRoot.child(`${user.userId}/${getTabProp(tab)}`);
+    tasks.once('value', snapshot => {
+        snapshot.forEach(todo => {
+            const { completed } = todo.val() as Todo;
+            if (completed) {
+                tasks.child(todo.key()).update({ completed: false }, err => {
+                    if (err) console.error(err)
+                });
+            }
+        })
+    });
+};
+
 export const changeTab = createAction<TabType>(
     ActionType.ChangeTab,
     (tab: TabType) => tab
