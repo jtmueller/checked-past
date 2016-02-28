@@ -23,16 +23,17 @@ class Header extends React.Component<HeaderProps, void> {
     }
 
     render() {
-        const { name } = this.props.curUser;
-        let title = TabType[this.props.tab].toLowerCase();
-        let slogan = `${name}'s Checked Past`
+        const { tab, curUser: {name} } = this.props;
+        let title = TabType[tab].toLowerCase();
+        let slogan = `${name}'s Checked Past`;
+        let placeholder = tab === TabType.Shopping ? 'What needs to be bought?' : 'What needs to be done?';
         return (
             <header className="header">
                 <TodoTextInput
                     newTodo
                     weeklyTodo={this.props.tab === TabType.Weekly}
                     onSave={this.handleSave.bind(this)}
-                    placeholder="What needs to be done?" />
+                    placeholder={placeholder} />
                 <div className="watermark">
                     <h2>{title}</h2>
                     <span>{slogan}</span>

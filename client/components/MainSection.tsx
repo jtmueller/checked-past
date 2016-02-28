@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as _ from 'lodash';
 
 import { Todo, TabType, Weekday, User } from '../models/todos';
-import { BasicItemList, WeekdayItemList } from './ItemLists';
+import { BasicItemList, WeekdayItemList, ShoppingItemList } from './ItemLists';
 import { ShowAll, ShowCompleted, ShowActive, FilterType } from '../constants/TodoFilters';
 
 const TodoFilters = {
@@ -43,7 +43,9 @@ class MainSection extends React.Component<MainSectionProps, void> {
             <section className="main">
                 {tab === TabType.Weekly
                     ? <WeekdayItemList todos={filteredTodos} tab={tab} user={user} actions={actions} />
-                    : <BasicItemList todos={filteredTodos} tab={tab} user={user} actions={actions} /> }
+                    : tab === TabType.Shopping
+                        ? <ShoppingItemList todos={filteredTodos} tab={tab} user={user} actions={actions} />
+                        : <BasicItemList todos={filteredTodos} tab={tab} user={user} actions={actions} /> }
             </section>
         );
     }

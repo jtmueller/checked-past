@@ -38,6 +38,8 @@ class Footer extends React.Component<FooterProps, void> {
                         Uncheck All
                     </Button>
                 );
+            case TabType.Shopping:
+                return;
             default:
                 return (
                     <Button className="pull-right clear-button"

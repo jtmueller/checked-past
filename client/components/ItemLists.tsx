@@ -67,3 +67,47 @@ export class WeekdayItemList extends React.Component<ItemListProps, { activeKey?
         );  
     }
 }
+
+export class ShoppingItemList extends React.Component<ItemListProps, { activeKey?: 'true' | 'false' }> {
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            activeKey: 'false'
+        };
+    }
+    
+    private handleSelect = (activeKey) => {
+        this.setState({ activeKey });
+    };
+    
+    render() {
+        const { todos, actions, tab, user } = this.props;
+        let { activeKey } = this.state;
+        const grouped = _.groupBy(todos, t => t.completed.toString());
+        
+        return (
+            <PanelGroup activeKey={activeKey} onSelect={this.handleSelect} accordion>
+                {_.map(['false', 'true'], completed => {
+                    let todos = grouped[completed] || [];
+                    if (todos.length) {
+                        let label = completed === 'false' ? 'Incomplete' : 'Complete';
+                        let unfinished = completed === 'false' ? todos.length : 0;
+                        let header = unfinished === 0 ? <span>{label}</span> : <span><Badge>{unfinished}</Badge> {label}</span>;
+                    
+                        return (
+                            <Panel header={header} key={completed} eventKey={completed}>
+                                <ListGroup fill>
+                                    {_.map(todos, todo =>
+                                        <ListGroupItem key={todo.id}>
+                                            <TodoItem todo={todo} tab={tab} user={user} { ...actions }/>
+                                        </ListGroupItem>
+                                    )}
+                                </ListGroup>
+                            </Panel>
+                        );
+                    }
+                })}
+            </PanelGroup>
+        );  
+    }
+}
