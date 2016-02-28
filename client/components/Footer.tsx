@@ -20,6 +20,7 @@ interface FooterProps {
     readonly clearCompleted: Function;
     readonly setFilter: Function;
     readonly tab: TabType;
+    readonly user: User;
 }
 
 class Footer extends React.Component<FooterProps, void> {
@@ -37,9 +38,10 @@ class Footer extends React.Component<FooterProps, void> {
     }
     
     private handleClearCompleted = () => {
-        const atLeastOneCompleted = _.some(this.props.todos, todo => todo.completed);
+        const { todos, user, tab, clearCompleted } = this.props;
+        const atLeastOneCompleted = _.some(todos, todo => todo.completed);
         if (atLeastOneCompleted) {
-            this.props.clearCompleted();
+            clearCompleted({ user, tab });
         }
     }
     

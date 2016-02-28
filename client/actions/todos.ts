@@ -138,10 +138,17 @@ export const toggleTodo = ({user, tab}: ActionContext, todo:Todo) => (dispatch) 
     tasks.child(todo.id).update({ completed: !todo.completed, lastModified: new Date().getTime() });
 };
 
-export const clearCompleted = createAction<void>(
-    ActionType.ClearCompleted,
-    () => { }
-);
+export const clearCompleted = ({user, tab}: ActionContext) => (dispatch) => {
+    let tasks = dbRoot.child(`${user.userId}/${getTabProp(tab)}`);
+    tasks.once('value', snapshot => {
+        snapshot.forEach(todo => {
+            const { completed } = todo.val() as Todo;
+            if (completed) {
+                tasks.child(todo.key()).remove();
+            }
+        })
+    });
+};
 
 export const changeTab = createAction<TabType>(
     ActionType.ChangeTab,

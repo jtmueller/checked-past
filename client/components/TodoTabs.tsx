@@ -42,9 +42,9 @@ class TodoTabs extends React.Component<TodoTabProps, void> {
     }
     
     private renderFooter(todos: ReadonlyArray<Todo>) {
-        const { state: {filter, activeTab}, actions: {clearCompleted, setFilter} } = this.props;
+        const { state: {filter, activeTab, curUser}, actions: {clearCompleted, setFilter} } = this.props;
         return (
-            <Footer tab={activeTab} {...{ todos, filter, clearCompleted, setFilter }} />
+            <Footer tab={activeTab} user={curUser} {...{ todos, filter, clearCompleted, setFilter }} />
         );
     }
     

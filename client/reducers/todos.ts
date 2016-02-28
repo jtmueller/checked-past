@@ -81,16 +81,6 @@ export default handleActions<AppState>({
         const values = _.map(curValues, cur => cur.id === todo.id ? todo : cur);
         return updateTabProp(state, values, tab);
     },
-
-    [ActionType.ClearCompleted]: (state: AppState, action: Action<void>): AppState => {
-        const curValues = getTabProp(state);
-        const values = _.filter(curValues, todo => todo.completed === false);
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = updateTabProp(state, values);
-        return { 
-            filter: filter === ShowCompleted ? ShowAll : filter,
-            monthlyTasks, weeklyTasks, todos, shopping, activeTab, curUser 
-        };
-    },
     
     [ActionType.RefreshTimes]: (state: AppState, action: Action<void>): AppState => {
         // this is just to get the UI to redraw the timestamps, so no changes, but we have to return
