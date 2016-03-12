@@ -44,6 +44,7 @@ export interface AppState {
     readonly activeTab: TabType;
     readonly filter: FilterType;
     readonly curUser?: User;
+    readonly size: { readonly width: number, readonly height: number }
 }
 
 export interface Action<T> {

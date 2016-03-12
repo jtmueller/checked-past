@@ -1,6 +1,6 @@
 'use strict';
 import * as React from 'react';
-import { Nav, NavItem, Badge, Panel } from 'react-bootstrap';
+import { Nav, NavItem, Badge, Panel, PanelGroup } from 'react-bootstrap';
 import * as _ from 'lodash';
 
 import { AppState, TabType, Todo } from '../models/todos';
@@ -16,9 +16,9 @@ interface TodoTabProps {
 const UndoneBadge = ({count}: {count:number}) => count > 0 ? <Badge>{count}</Badge> : <span/>;
 
 class TodoTabs extends React.Component<TodoTabProps, void> {  
-    private getSelectedTodos() {
+    private getSelectedTodos(tab:TabType) {
         const state = this.props.state;
-        switch (state.activeTab) {
+        switch (tab) {
             case TabType.Monthly:
                 return state.monthlyTasks;
             case TabType.Weekly:
@@ -71,17 +71,53 @@ class TodoTabs extends React.Component<TodoTabProps, void> {
         ); 
     }
     
-    render() {
-        const todos = this.getSelectedTodos();
+    private renderContent(tab:TabType) {
         const { actions, state } = this.props;
+        const todos = this.getSelectedTodos(tab);
+        
+        return [
+            <Header key={0} addTodo={actions.addTodo} tab={tab} curUser={state.curUser} />,
+            <MainSection key={1} todos={todos} tab={tab} user={state.curUser} actions={actions} filter={state.filter} />
+        ]
+    }
+    
+    private renderAccPanel(tab:TabType) {
+        const { actions, state } = this.props;
+        const todos = this.getSelectedTodos(tab);
+        const count = this.countUndone(todos);
+        return (
+            <Panel key={tab} eventKey={tab} className="todo-list"
+                header={<span><UndoneBadge count={count} /> {TabType[tab]}</span>}
+                footer={tab === state.activeTab ? this.renderFooter(todos) : null}>
+                {this.renderContent(tab)}
+            </Panel>
+        );   
+    }
+    
+    private renderAccordion() {
+        const { state } = this.props;
+        return (
+            <PanelGroup activeKey={state.activeTab} onSelect={this.handleSelect} accordion>
+                { _.map([TabType.Weekly, TabType.Monthly, TabType.Todos, TabType.Shopping], t => this.renderAccPanel(t)) }
+            </PanelGroup>
+        );
+    }
+    
+    render() {
+        const { actions, state } = this.props;
+        
+        if (state.size.width < 480) {
+            return this.renderAccordion();
+        }
+
+        const todos = this.getSelectedTodos(state.activeTab);
 
         return (
             <div>
                 {this.renderTabs(state)}
                 <div className="tab-content">
                     <Panel className="todo-list tab-pane active" footer={this.renderFooter(todos)}>
-                        <Header addTodo={actions.addTodo} tab={state.activeTab} curUser={state.curUser} />
-                        <MainSection todos={todos} tab={state.activeTab} user={state.curUser} actions={actions} filter={state.filter} />
+                        {this.renderContent(state.activeTab)}
                     </Panel>
                 </div>
             </div>

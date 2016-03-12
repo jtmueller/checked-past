@@ -104,6 +104,14 @@ setInterval(() => {
     })
 }, 60 * 1000);
 
+window.addEventListener('resize', e => {
+    const { innerWidth, innerHeight } = window;
+    store.dispatch({
+        type: ActionType.Resize,
+        payload: { width: innerWidth, height: innerHeight }
+    })
+});
+
 export const addTodo = ({user, tab}: ActionContext, text: string, weekday?: Weekday) => (dispatch) => {
     if (!text) return;
     let tasks = dbRoot.child(`${user.userId}/${getTabProp(tab)}`);

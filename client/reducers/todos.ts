@@ -20,7 +20,8 @@ const initialState: AppState = {
     todos: [] as Todo[],
     shopping: [] as Todo[],
     activeTab: TabType.Weekly,
-    filter: 'show_all'
+    filter: 'show_all',
+    size: { width: window.innerWidth, height: window.innerHeight }
 };
 
 function getTabProp(state:AppState, tab?: TabType) {
@@ -37,7 +38,7 @@ function getTabProp(state:AppState, tab?: TabType) {
 
 function updateTabProp(state: AppState, values: ReadonlyArray<Todo>, tab?: TabType): AppState {
     //console.log('setTabProp', TabType[tab || state.activeTab], values);
-    let { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = state;
+    let { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser, size } = state;
     switch (tab || state.activeTab) {
         case TabType.Weekly:
             weeklyTasks = values;
@@ -54,7 +55,7 @@ function updateTabProp(state: AppState, values: ReadonlyArray<Todo>, tab?: TabTy
         default:
             throw new Error(`Unknown tab type: '${state.activeTab}' (${TabType[state.activeTab]}).`);
     }
-    return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser };
+    return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser, size };
 }
 
 export default handleActions<AppState>({
@@ -85,22 +86,27 @@ export default handleActions<AppState>({
     [ActionType.RefreshTimes]: (state: AppState, action: Action<void>): AppState => {
         // this is just to get the UI to redraw the timestamps, so no changes, but we have to return
         // a different state instance or redux decides that nothing changed and does not re-render
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser };
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser, size } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser, size };
     },
     
     [ActionType.ChangeTab]: (state: AppState, action: Action<TabType>): AppState => {
-        const { monthlyTasks, weeklyTasks, todos, shopping, filter, curUser } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab: action.payload, filter, curUser };
+        const { monthlyTasks, weeklyTasks, todos, shopping, filter, curUser, size } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab: action.payload, filter, curUser, size };
     },
     
     [ActionType.SetFilter]: (state: AppState, action: Action<FilterType>): AppState => {
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, curUser } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter: action.payload, curUser };
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, curUser, size } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter: action.payload, curUser, size };
     },
     
     [ActionType.Auth]: (state: AppState, action: Action<User>): AppState => {
-        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter } = state;
-        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser: action.payload };
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, size } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser: action.payload, size };
+    },
+    
+    [ActionType.Resize]: (state: AppState, action: Action<{ width: number, height: number }>): AppState => {
+        const { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser } = state;
+        return { monthlyTasks, weeklyTasks, todos, shopping, activeTab, filter, curUser, size: action.payload };
     }
 }, initialState);
